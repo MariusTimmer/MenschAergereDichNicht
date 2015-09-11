@@ -2,14 +2,17 @@ package de.timmer.menschaergeredichnicht;
 
 import java.awt.Color;
 import de.timmer.menschaergeredichnicht.model.Player;
+import de.timmer.menschaergeredichnicht.gui.GameBoard;
 
 class Controller {
 
     public static final Color[] AVAILABLE_PLAYER_COLORS = {Color.RED, Color.BLUE, Color.YELLOW, Color.GREEN};
     private Player[] players;
+    private GameBoard board;
     
     public Controller(int number_of_players) {
         this.initPlayers(number_of_players);
+        this.board = new GameBoard(11);
     }
     
     /**
