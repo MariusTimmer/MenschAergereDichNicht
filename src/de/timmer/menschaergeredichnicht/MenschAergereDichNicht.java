@@ -9,6 +9,7 @@ package de.timmer.menschaergeredichnicht;
      */
 
 import de.timmer.menschaergeredichnicht.Logger;
+import java.awt.HeadlessException;
 
 public class MenschAergereDichNicht {
 
@@ -26,19 +27,23 @@ public class MenschAergereDichNicht {
     private static Controller gamecontroller;
     
     public static void main(String[] args) {
-        Logger.write("Dateien einlesen");
-        Logger.write("Gamecontroller starten");
-        if (args.length > 0) {
-            Logger.write("Lese Anzahl der Spieler aus Kommandozeile aus");
-            try {
-                gamecontroller = new Controller(Integer.parseInt(args[0]));
-            } catch (NumberFormatException e) {
-                Logger.write("Argument war keine Zahl; "+ e.getMessage());
+        try {
+            Logger.write("Dateien einlesen");
+            Logger.write("Gamecontroller starten");
+            if (args.length > 0) {
+                Logger.write("Lese Anzahl der Spieler aus Kommandozeile aus");
+                try {
+                    gamecontroller = new Controller(Integer.parseInt(args[0]));
+                } catch (NumberFormatException e) {
+                    Logger.write("Argument war keine Zahl; "+ e.getMessage());
+                    gamecontroller = new Controller(DEFAULT_NUMBER_OF_PLAYERS);
+                }
+            } else {
+                Logger.write("Nutze Standardanzahl von "+ DEFAULT_NUMBER_OF_PLAYERS);
                 gamecontroller = new Controller(DEFAULT_NUMBER_OF_PLAYERS);
             }
-        } else {
-            Logger.write("Nutze Standardanzahl von "+ DEFAULT_NUMBER_OF_PLAYERS);
-            gamecontroller = new Controller(DEFAULT_NUMBER_OF_PLAYERS);
+        } catch (HeadlessException e) {
+            Logger.write("Kein FensterManager gefunden! "+ e.getMessage());
         }
     }
 
