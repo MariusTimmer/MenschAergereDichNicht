@@ -1,0 +1,15 @@
+###
+# Configuration for the board (4 players)
+# It is meant to be read line-by-line
+# Arguments are separated by a ";"-Character
+#  First arg: Row of the object
+# Second arg: Column of the object
+#  Third arg: Type of the object (int is for enum-recognition
+#   More arg: arguments for the constructor (depends on type)
+###
+0;0;0;0;0
+0;1;0;0;1
+0;4;1;0;5
+0;5;1;0;6
+
+# Just a prototype

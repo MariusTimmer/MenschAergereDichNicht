@@ -5,7 +5,7 @@ import javax.swing.JFrame;
 public class GameBoard extends JFrame {
 
     public static final int DEFAULT_BOARD_SIZE = 11;
-    private Field[][] fields;
+    private BoardElement[][] fields;
     private int map_size;
     
     public GameBoard() {
@@ -16,15 +16,25 @@ public class GameBoard extends JFrame {
         super();
         this.initBoard(board_size);
     }
+
+    public BoardElement getBoardElement(int x, int y) {
+        return this.fields[y][x];
+    }
+    
+    public BoardElement getBoardElement(Coordinate c) {
+        return this.getBoardElement(c.getX(), c.getY());
+    }
     
     private void initBoard(int size) {
         int x, y;
         this.map_size = size;
-        this.fields = new Field[this.map_size][];
+        this.fields = new BoardElement[this.map_size][];
         for (y = 0; y < this.map_size; y++) {
-            this.fields[y] = new Field[this.map_size];
+            this.fields[y] = new BoardElement[this.map_size];
             for (x = 0; x < this.map_size; x++) {
-                this.fields[y][x] = new Field();
+                // @todo: Read the coordinate for the next element and put it into the constructor
+                Coordinate next = new Coordinate(0,0);
+                this.fields[y][x] = new Field(next);
             }
         }
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
