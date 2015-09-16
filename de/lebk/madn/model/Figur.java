@@ -7,7 +7,7 @@ public class Figur implements Comparable<Figur> {
 	
 	private Color color;
 	private int position;
-	
+
 	public Figur(Color color) {
 		this.color = color;
 		this.position = 0;

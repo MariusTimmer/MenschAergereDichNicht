@@ -7,7 +7,7 @@ public class Spiel {
 	
 	public static final Color[] AVAILABLE_COLORS= {Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW};
 	private Player[] players;
-	
+
 	public Spiel(int number_of_players) {
 		this.initPlayers(number_of_players);
 	}
