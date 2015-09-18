@@ -7,8 +7,8 @@
 #  Third arg: Type of the object (int is for enum-recognition
 #   More arg: arguments for the constructor (depends on type)
 ###
-0;0;0;0;0
-0;1;0;0;1
+0;0;0;0;0;0
+0;1;0;0;1;0
 0;4;1;0;5
 0;5;1;0;6
 
