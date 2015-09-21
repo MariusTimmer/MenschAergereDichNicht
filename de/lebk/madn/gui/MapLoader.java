@@ -88,9 +88,9 @@ public class MapLoader {
         if ((this.isValid(line)) && (line.contains(PART_SEPARATOR)) && (typ != null)) {
             String[] parts = line.split(PART_SEPARATOR);
             switch (typ) {
-                case XPOS:
-                    return parts[0];
                 case YPOS:
+                    return parts[0];
+                case XPOS:
                     return parts[1];
                 case TYPE:
                     return parts[2];
