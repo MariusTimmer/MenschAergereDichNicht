@@ -15,8 +15,7 @@ public class BoardElementHome extends BoardElement {
     
     public void paint(Graphics g) {
         super.paint(g);
-        g.setColor(this.color);
-        g.fillOval(DEFAULT_CIRCLE_PADDING, DEFAULT_CIRCLE_PADDING, this.getWidth() - (2 * DEFAULT_CIRCLE_PADDING), this.getHeight() - (2 * DEFAULT_CIRCLE_PADDING));
+        this.drawField(g, Color.BLACK, this.color);
     }
     
 }
