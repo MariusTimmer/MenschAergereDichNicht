@@ -6,6 +6,7 @@ import de.lebk.madn.MenschAergereDichNichtException;
 import de.lebk.madn.MapException;
 import de.lebk.madn.MapNotParsableException;
 import de.lebk.madn.MapNotFoundException;
+import de.lebk.madn.model.Figur;
 import java.awt.Color;
 import javax.swing.JFrame;
 
@@ -71,7 +72,7 @@ public class Board extends JFrame {
             }
             // Add the dice
             this.dice = new BoardDice();
-            this.dice.setBounds(elem_width * 5, elem_width * 5, elem_width, elem_width);
+            this.dice.setBounds((elem_width * 5) + (elem_width/8), (elem_width * 5) + (elem_width/8), (elem_width/4)*3, (elem_width/4)*3);
             this.add(this.dice);
         } else {
             // Error reading file

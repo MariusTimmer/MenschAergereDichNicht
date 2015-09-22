@@ -34,6 +34,10 @@ public class Player implements Comparable<Player> {
         return amount;
     }
 
+    public Color getColor() {
+        return this.color;
+    }
+
     @Override
     public String toString() {
         return String.format("%s [%s]", this.name, this.color.toString());

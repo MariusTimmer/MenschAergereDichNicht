@@ -1,8 +1,9 @@
 package de.lebk.madn;
 
 import de.lebk.madn.gui.Board;
-import java.awt.Color;
+import de.lebk.madn.Logger;
 import de.lebk.madn.model.Player;
+import java.awt.Color;
 
 public class Spiel {
 
@@ -11,10 +12,15 @@ public class Spiel {
     private int dice_maximum = DEFAULT_DICE_MAXIMUM;
     private Player[] players;
     private Board board;
+    private long inittime;
+    private long starttime;
 
     public Spiel(int number_of_players, String mapfile) {
+        this.inittime = System.currentTimeMillis();
         this.initPlayers(number_of_players);
         this.initGUI(mapfile);
+        this.starttime = System.currentTimeMillis();
+        Logger.write(String.format("Ladezeit: %d ms", (this.starttime - this.inittime)));
     }
     
     private void initGUI(String mapfile) {
