@@ -6,6 +6,7 @@ import de.lebk.madn.Spiel;
 import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.LinkedList;
 
@@ -35,8 +36,11 @@ public class MapLoader {
             }
             br.close();
             return lines.toArray(new String[lines.size()]);
+        } catch (FileNotFoundException e) {
+            Logger.write(String.format("Die Datei \"%s\" konnte nicht gefunden werden!", this.filename));
+            return null;
         } catch (IOException e) {
-            Logger.write(String.format("Fehler beim Lesen der Datei \"%s\"", this.filename));
+            Logger.write(String.format("Ein-/Ausgabe-Fehler beim mapfile \"%s\"!", this.filename));
             return null;
         }
     }
