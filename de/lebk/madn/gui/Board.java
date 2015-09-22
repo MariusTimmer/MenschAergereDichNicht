@@ -2,10 +2,12 @@ package de.lebk.madn.gui;
 
 import de.lebk.madn.Coordinate;
 import de.lebk.madn.Logger;
+import de.lebk.madn.MenschAergereDichNichtException;
+import de.lebk.madn.MapException;
+import de.lebk.madn.MapNotParsableException;
+import de.lebk.madn.MapNotFoundException;
 import java.awt.Color;
 import javax.swing.JFrame;
-import javax.swing.JDialog;
-import javax.swing.JOptionPane;
 
 public class Board extends JFrame {
     
@@ -16,7 +18,7 @@ public class Board extends JFrame {
     private BoardElement[][] fields;
     private BoardDice dice;
 
-    public Board(String mapfile) {
+    public Board(String mapfile) throws MenschAergereDichNichtException {
         super("Mensch ärgere dich nicht");
         this.setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT + DEFAULT_BORDER);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -33,7 +35,7 @@ public class Board extends JFrame {
         this.dice.setNumber(number);
     }
     
-    private void initFields(String mapfile) {
+    private void initFields(String mapfile) throws MapException {
         MapLoader loader = new MapLoader(mapfile);
         String[] lines = loader.readFile();
         if (lines != null) {
@@ -62,7 +64,7 @@ public class Board extends JFrame {
                         this.fields[x][y] = new BoardElementGoal(next, color);
                         break;
                     default:
-                        Logger.write(String.format("Board::initFields: Der Typ \"%s\" wurde noch nicht implementiert!", typ.toString()));
+                        throw new MapNotParsableException(String.format("BoardElement \"%s\" is not implemented yet / unknown!", typ.toString()));
                 }
                 this.fields[x][y].setBounds(elem_left, elem_top, elem_width, elem_width);
                 this.add(this.fields[x][y]);
@@ -73,21 +75,8 @@ public class Board extends JFrame {
             this.add(this.dice);
         } else {
             // Error reading file
-            this.showDialogBox(String.format("Mapfile \"%s\" konnte nicht gelesen werden!", mapfile));
+            throw new MapNotFoundException(String.format("Mapfile \"%s\" not found!", mapfile));
         }
-    }
-    
-    public void showDialogBox(String text) {
-        this.showDialogBox(DEFAULT_DIALOGBOX_TITLE, text);
-    }
-    
-    public void showDialogBox(String title, String text) {
-        JOptionPane optionPane = new JOptionPane(text);
-        JDialog dialog = new JDialog(this, title, true);
-        dialog.setContentPane(optionPane);
-        dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
-        dialog.pack();
-        dialog.setVisible(true);
     }
     
 }

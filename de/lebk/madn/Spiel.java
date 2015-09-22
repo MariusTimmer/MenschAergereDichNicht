@@ -19,7 +19,11 @@ public class Spiel {
     
     private void initGUI(String mapfile) {
         // Init the board
-        this.board = new Board(mapfile);
+        try {
+            this.board = new Board(mapfile);
+        } catch (MenschAergereDichNichtException e) {
+            Logger.write(String.format("Error: %s", e.getMessage()));
+        }
     }
 
     private void initPlayers(int number_of_players) {
