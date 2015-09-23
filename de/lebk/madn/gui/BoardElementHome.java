@@ -4,18 +4,17 @@ import de.lebk.madn.Coordinate;
 import java.awt.Color;
 import java.awt.Graphics;
 
-public class BoardElementHome extends BoardElement {
-
-    protected Color color;
+public class BoardElementHome extends BoardElementColored {
     
     public BoardElementHome(Coordinate nextElement, Color color) {
-        super(nextElement);
-        this.color = color;
+        super(nextElement, color);
     }
     
-    public void paint(Graphics g) {
-        super.paint(g);
+    @Override
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
         this.drawField(g, Color.BLACK, this.color);
+        this.drawOccupier(g);
     }
     
 }

@@ -4,17 +4,18 @@ import de.lebk.madn.Coordinate;
 import java.awt.Color;
 import java.awt.Graphics;
 
-public class BoardElementGoal extends BoardElement {
-
-    protected Color color;
+public class BoardElementGoal extends BoardElementColored {
 
     public BoardElementGoal(Coordinate nextElement, Color color) {
-        super(nextElement);
-        this.color = color;
+        super(nextElement, color);
     }
     
-    public void paint(Graphics g) {
-        super.paint(g);
+    public Color getColor() {
+        return this.color;
+    }
+    
+    public void paintComponent(Graphics g){
+        super.paintComponent(g);
         int red, green, blue;
         Color lighter;
         float fraction = 0.5f;
@@ -23,6 +24,7 @@ public class BoardElementGoal extends BoardElement {
         blue    = (int) (this.color.getBlue() * fraction);
         lighter  = new Color(red, green, blue);
         this.drawField(g, lighter, this.color);
+        this.drawOccupier(g);
     }
     
 }

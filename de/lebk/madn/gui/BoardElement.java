@@ -1,13 +1,14 @@
 package de.lebk.madn.gui;
 
 import de.lebk.madn.Coordinate;
-import de.lebk.madn.model.Player;
+import de.lebk.madn.Logger;
 import de.lebk.madn.model.Figur;
+import de.lebk.madn.model.Player;
 import java.awt.BasicStroke;
-import javax.swing.JComponent;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import javax.swing.JComponent;
 
 abstract public class BoardElement extends JComponent {
     
@@ -56,13 +57,14 @@ abstract public class BoardElement extends JComponent {
      * @return True if the new occupier is on the field or false if the field was used already
      */
     public boolean occupie(Figur figure) {
+        boolean returnVal = false;
         if (!this.isOccupied()) {
             // Field is available
             this.occupier = figure;
-            return true;
-        } else {
-            return false;
+            returnVal = true;
         }
+        this.repaint();
+        return returnVal;
     }
     
     /**
@@ -96,20 +98,25 @@ abstract public class BoardElement extends JComponent {
         // Draw the outer circle
         g2.setColor(foreground);
         g2.drawOval(DEFAULT_CIRCLE_PADDING, DEFAULT_CIRCLE_PADDING, this.getWidth() - (2 * DEFAULT_CIRCLE_PADDING), this.getHeight() - (2 * DEFAULT_CIRCLE_PADDING));
+    }
+    
+    protected void drawOccupier(Graphics g) {
         if (this.isOccupied()) {
             // draw this field as occupied
+            Graphics2D g2 = (Graphics2D) g;
+            g2.setStroke(new BasicStroke(3));
             g2.setColor(Color.BLACK);
             g2.drawOval(DEFAULT_CIRCLE_PADDING + FIGURE_RADIUS, DEFAULT_CIRCLE_PADDING + FIGURE_RADIUS, this.getWidth() - (2 * (FIGURE_RADIUS + DEFAULT_CIRCLE_PADDING)), this.getHeight() - (2 * (FIGURE_RADIUS + DEFAULT_CIRCLE_PADDING)));
             g2.setColor(this.occupier.getColor());
             g2.fillOval(DEFAULT_CIRCLE_PADDING + FIGURE_RADIUS, DEFAULT_CIRCLE_PADDING + FIGURE_RADIUS, this.getWidth() - (2 * (FIGURE_RADIUS + DEFAULT_CIRCLE_PADDING)), this.getHeight() - (2 * (FIGURE_RADIUS + DEFAULT_CIRCLE_PADDING)));
         }
-	
     }
     
     @Override
-    public void paint(Graphics g) {
-        super.paint(g);
-        this.drawField(g, Color.BLACK, null);
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        //this.drawField(g, Color.BLACK, null);
+        //this.drawOccupier(g);
     }
     
 }

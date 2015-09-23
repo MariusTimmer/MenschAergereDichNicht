@@ -1,13 +1,14 @@
 package de.lebk.madn;
 
 import de.lebk.madn.gui.Board;
-import de.lebk.madn.Logger;
+import de.lebk.madn.gui.BoardElementHome;
+import de.lebk.madn.model.Figur;
 import de.lebk.madn.model.Player;
 import java.awt.Color;
 
 public class Spiel {
 
-    public static final Color[] AVAILABLE_COLORS = {Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW};
+    public static final Color[] AVAILABLE_COLORS = {Color.RED, Color.BLUE, Color.YELLOW, Color.GREEN, Color.PINK, Color.ORANGE};
     public static final int DEFAULT_DICE_MAXIMUM = 6;
     private int dice_maximum = DEFAULT_DICE_MAXIMUM;
     private Player[] players;
@@ -17,8 +18,8 @@ public class Spiel {
 
     public Spiel(int number_of_players, String mapfile) {
         this.inittime = System.currentTimeMillis();
-        this.initPlayers(number_of_players);
         this.initGUI(mapfile);
+        this.initPlayers(number_of_players);
         this.starttime = System.currentTimeMillis();
         Logger.write(String.format("Ladezeit: %d ms", (this.starttime - this.inittime)));
     }
@@ -40,6 +41,15 @@ public class Spiel {
             // Erzeuge die Spieler und vergib ihnen die Farben
             Color playercolor = AVAILABLE_COLORS[i % AVAILABLE_COLORS.length];
             this.players[i] = new Player(playercolor);
+            for (Figur figur: this.players[i].getFigures()) {
+                boolean figurSet = false;
+                for (BoardElementHome home: this.board.getHomesOf(playercolor)) {
+                    if ((!home.isOccupied()) && (figurSet == false)) {
+                        home.occupie(figur);
+                        figurSet = true;
+                    }
+                }
+            }
         }
     }
     

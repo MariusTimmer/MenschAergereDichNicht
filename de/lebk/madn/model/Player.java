@@ -33,6 +33,10 @@ public class Player implements Comparable<Player> {
         }
         return amount;
     }
+    
+    public Figur[] getFigures() {
+        return this.figures;
+    }
 
     public Color getColor() {
         return this.color;

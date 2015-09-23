@@ -1,13 +1,13 @@
 package de.lebk.madn.gui;
 
 import de.lebk.madn.Coordinate;
-import de.lebk.madn.Logger;
-import de.lebk.madn.MenschAergereDichNichtException;
 import de.lebk.madn.MapException;
-import de.lebk.madn.MapNotParsableException;
 import de.lebk.madn.MapNotFoundException;
-import de.lebk.madn.model.Figur;
+import de.lebk.madn.MapNotParsableException;
+import de.lebk.madn.MenschAergereDichNichtException;
 import java.awt.Color;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import javax.swing.JFrame;
 
 public class Board extends JFrame {
@@ -15,7 +15,8 @@ public class Board extends JFrame {
     public static final int DEFAULT_WIDTH = 800;
     public static final int DEFAULT_HEIGHT = 800;
     public static final int DEFAULT_BORDER = 48;
-    private static final String DEFAULT_DIALOGBOX_TITLE = "Information";
+    private ArrayList<BoardElementHome> homes;
+    private ArrayList<BoardElementGoal> goals;
     private BoardElement[][] fields;
     private BoardDice dice;
 
@@ -36,8 +37,30 @@ public class Board extends JFrame {
         this.dice.setNumber(number);
     }
     
+    public BoardElementHome[] getHomesOf(Color color) {
+        LinkedList<BoardElementHome> homes = new LinkedList<>();
+        for (BoardElementHome home: this.homes) {
+            if (home.isSameColor(color)) {
+                homes.add(home);
+            }
+        }
+        return homes.toArray(new BoardElementHome[homes.size()]);
+    }
+    
+    public BoardElementGoal[] getGoalsOf(Color color) {
+        LinkedList<BoardElementGoal> goals = new LinkedList<>();
+        for (BoardElementGoal goal: this.goals) {
+            if (goal.isSameColor(color)) {
+                goals.add(goal);
+            }
+        }
+        return goals.toArray(new BoardElementGoal[goals.size()]);
+    }
+    
     private void initFields(String mapfile) throws MapException {
         MapLoader loader = new MapLoader(mapfile);
+        this.homes = new ArrayList<>();
+        this.goals = new ArrayList<>();
         String[] lines = loader.readFile();
         if (lines != null) {
             int size = loader.getMapSize(lines);
@@ -52,22 +75,26 @@ public class Board extends JFrame {
                 Color color;
                 int elem_left = elem_width * x;
                 int elem_top = elem_width * y;
+                BoardElement element;
                 switch (typ) {
                     case HOME:
                         color = loader.getColorFromLine(line);
-                        this.fields[x][y] = new BoardElementHome(next, color);
+                        this.homes.add(new BoardElementHome(next, color));
+                        element = (BoardElement) this.homes.get(this.homes.size()-1);
                         break;
                     case WAYPOINT:
-                        this.fields[x][y] = new BoardElementWaypoint(next);
+                        element = new BoardElementWaypoint(next);
                         break;
                     case GOAL:
                         color = loader.getColorFromLine(line);
-                        this.fields[x][y] = new BoardElementGoal(next, color);
+                        this.goals.add(new BoardElementGoal(next, color));
+                        element = (BoardElement) this.goals.get(this.goals.size()-1);
                         break;
                     default:
                         throw new MapNotParsableException(String.format("BoardElement \"%s\" is not implemented yet / unknown!", typ.toString()));
                 }
-                this.fields[x][y].setBounds(elem_left, elem_top, elem_width, elem_width);
+                element.setBounds(elem_left, elem_top, elem_width, elem_width);
+                this.fields[x][y] = element;
                 this.add(this.fields[x][y]);
             }
             // Add the dice
