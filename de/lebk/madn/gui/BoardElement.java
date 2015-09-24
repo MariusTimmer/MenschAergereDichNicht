@@ -57,14 +57,20 @@ abstract public class BoardElement extends JComponent {
      * @return True if the new occupier is on the field or false if the field was used already
      */
     public boolean occupie(Figur figure) {
-        boolean returnVal = false;
         if (!this.isOccupied()) {
-            // Field is available
-            this.occupier = figure;
-            returnVal = true;
+            this.setOccupierPrivate(figure)
+            return true;
         }
+        return false;
+    }
+    
+    private void setOccupierPrivate(Figur figure) {
+        this.occupier = figure;
         this.repaint();
-        return returnVal;
+    }
+    
+    public void occupierLeaves() {
+        this.setOccupierPrivate(null);
     }
     
     /**
