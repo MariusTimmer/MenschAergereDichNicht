@@ -14,8 +14,7 @@ abstract public class BoardElement extends JComponent {
     
     public static enum		BOARD_ELEMENT_TYPES	{HOME, WAYPOINT, GOAL};
     public static final int	FIELD_BORDER_WIDTH	= 1;
-    private static final int	FIGURE_RADIUS		= 8;
-    public static final int	DEFAULT_CIRCLE_PADDING	= 11;
+    public static int		CIRCLE_PADDING		= 0;
     protected Coordinate	nextElement;
     protected Figur		occupier		= null; /* The figure that uses this field */
     
@@ -58,7 +57,7 @@ abstract public class BoardElement extends JComponent {
      */
     public boolean occupie(Figur figure) {
         if (!this.isOccupied()) {
-            this.setOccupierPrivate(figure)
+            this.setOccupierPrivate(figure);
             return true;
         }
         return false;
@@ -66,7 +65,8 @@ abstract public class BoardElement extends JComponent {
     
     private void setOccupierPrivate(Figur figure) {
         this.occupier = figure;
-        this.repaint();
+        this.revalidate();
+        //this.repaint();
     }
     
     public void occupierLeaves() {
@@ -100,29 +100,33 @@ abstract public class BoardElement extends JComponent {
             // Use a default white color
             g2.setColor(Color.WHITE);
         }
-        g2.fillOval(DEFAULT_CIRCLE_PADDING, DEFAULT_CIRCLE_PADDING, this.getWidth() - (2 * DEFAULT_CIRCLE_PADDING), this.getHeight() - (2 * DEFAULT_CIRCLE_PADDING));
+        g2.fillOval(CIRCLE_PADDING, CIRCLE_PADDING, this.getWidth() - (2 * CIRCLE_PADDING), this.getHeight() - (2 * CIRCLE_PADDING));
         // Draw the outer circle
         g2.setColor(foreground);
-        g2.drawOval(DEFAULT_CIRCLE_PADDING, DEFAULT_CIRCLE_PADDING, this.getWidth() - (2 * DEFAULT_CIRCLE_PADDING), this.getHeight() - (2 * DEFAULT_CIRCLE_PADDING));
+        g2.drawOval(CIRCLE_PADDING, CIRCLE_PADDING, this.getWidth() - (2 * CIRCLE_PADDING), this.getHeight() - (2 * CIRCLE_PADDING));
     }
     
     protected void drawOccupier(Graphics g) {
         if (this.isOccupied()) {
             // draw this field as occupied
             Graphics2D g2 = (Graphics2D) g;
+            int figure_radius = Math.round((this.getWidth() - (2 * CIRCLE_PADDING)) / 4);
             g2.setStroke(new BasicStroke(3));
             g2.setColor(Color.BLACK);
-            g2.drawOval(DEFAULT_CIRCLE_PADDING + FIGURE_RADIUS, DEFAULT_CIRCLE_PADDING + FIGURE_RADIUS, this.getWidth() - (2 * (FIGURE_RADIUS + DEFAULT_CIRCLE_PADDING)), this.getHeight() - (2 * (FIGURE_RADIUS + DEFAULT_CIRCLE_PADDING)));
+            g2.drawOval(CIRCLE_PADDING + figure_radius, CIRCLE_PADDING + figure_radius, this.getWidth() - (2 * (figure_radius + CIRCLE_PADDING)), this.getHeight() - (2 * (figure_radius + CIRCLE_PADDING)));
             g2.setColor(this.occupier.getColor());
-            g2.fillOval(DEFAULT_CIRCLE_PADDING + FIGURE_RADIUS, DEFAULT_CIRCLE_PADDING + FIGURE_RADIUS, this.getWidth() - (2 * (FIGURE_RADIUS + DEFAULT_CIRCLE_PADDING)), this.getHeight() - (2 * (FIGURE_RADIUS + DEFAULT_CIRCLE_PADDING)));
+            g2.fillOval(CIRCLE_PADDING + figure_radius, CIRCLE_PADDING + figure_radius, this.getWidth() - (2 * (figure_radius + CIRCLE_PADDING)), this.getHeight() - (2 * (figure_radius + CIRCLE_PADDING)));
         }
     }
     
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        //this.drawField(g, Color.BLACK, null);
-        //this.drawOccupier(g);
+    }
+    
+    @Override
+    public String toString() {
+        return String.format("%s", this.getClass().getSimpleName());
     }
     
 }

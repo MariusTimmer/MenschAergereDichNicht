@@ -26,4 +26,9 @@ public class BoardElementColored extends BoardElement {
         super.paintComponent(g);
     }
     
+    @Override
+    public String toString() {
+        return String.format("%s (Farbe: %s)", super.toString(), this.color.toString());
+    }
+    
 }

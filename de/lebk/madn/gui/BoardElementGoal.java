@@ -16,14 +16,19 @@ public class BoardElementGoal extends BoardElementColored {
     
     public void paintComponent(Graphics g){
         super.paintComponent(g);
-        int red, green, blue;
-        Color lighter;
-        float fraction = 0.5f;
-        red     = (int) (this.color.getRed() * fraction);
-        green   = (int) (this.color.getGreen() * fraction);
-        blue    = (int) (this.color.getBlue() * fraction);
-        lighter  = new Color(red, green, blue);
-        this.drawField(g, lighter, this.color);
+        int redB, greenB, blueB;
+        int redF, greenF, blueF;
+        Color border, inner;
+        float fraction = 0.1f;
+        redB     = (int) (this.color.getRed() * fraction);
+        greenB   = (int) (this.color.getGreen() * fraction);
+        blueB    = (int) (this.color.getBlue() * fraction);
+        redF     = (int) (this.color.getRed() * (1-fraction));
+        greenF   = (int) (this.color.getGreen() * (1-fraction));
+        blueF    = (int) (this.color.getBlue() * (1-fraction));
+        border   = new Color(redB, greenB, blueB);
+        inner    = new Color(redF, greenF, blueF);
+        this.drawField(g, border, inner);
         this.drawOccupier(g);
     }
     

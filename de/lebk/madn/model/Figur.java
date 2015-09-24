@@ -25,6 +25,11 @@ public class Figur implements Comparable<Figur> {
     }
 
     @Override
+    public String toString() {
+        return String.format("Figur (%s)", this.getColor().toString());
+    }
+
+    @Override
     public int compareTo(Figur other) {
         return Integer.compare(this.position, other.position);
     }

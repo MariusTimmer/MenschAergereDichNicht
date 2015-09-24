@@ -21,8 +21,8 @@ public class Player implements Comparable<Player> {
 
     private void initFigures(int nof) {
         this.figures = new Figur[nof];
-        for (Figur figur : this.figures) {
-            figur = new Figur(this.color);
+        for (int i = 0; i < nof; i++) {
+            this.figures[i] = new Figur(this.color);
         }
     }
     

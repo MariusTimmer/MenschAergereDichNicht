@@ -34,10 +34,10 @@ public class BoardDice extends JComponent {
         g2.setStroke(new BasicStroke(BoardElement.FIELD_BORDER_WIDTH));
         // Lets fill the dice
         g2.setColor(new Color(239, 239, 239));
-        g2.fillRoundRect(BoardElement.DEFAULT_CIRCLE_PADDING, BoardElement.DEFAULT_CIRCLE_PADDING, this.getWidth() - (2 * BoardElement.DEFAULT_CIRCLE_PADDING), this.getHeight() - (2 * BoardElement.DEFAULT_CIRCLE_PADDING), BoardElement.DEFAULT_CIRCLE_PADDING, BoardElement.DEFAULT_CIRCLE_PADDING);
+        g2.fillRoundRect(BoardElement.CIRCLE_PADDING, BoardElement.CIRCLE_PADDING, this.getWidth() - (2 * BoardElement.CIRCLE_PADDING), this.getHeight() - (2 * BoardElement.CIRCLE_PADDING), BoardElement.CIRCLE_PADDING, BoardElement.CIRCLE_PADDING);
         // Draw line
         g2.setColor(Color.BLACK);
-        g2.drawRoundRect(BoardElement.DEFAULT_CIRCLE_PADDING, BoardElement.DEFAULT_CIRCLE_PADDING, this.getWidth() - (2 * BoardElement.DEFAULT_CIRCLE_PADDING), this.getHeight() - (2 * BoardElement.DEFAULT_CIRCLE_PADDING), BoardElement.DEFAULT_CIRCLE_PADDING / 2, BoardElement.DEFAULT_CIRCLE_PADDING / 2);
+        g2.drawRoundRect(BoardElement.CIRCLE_PADDING, BoardElement.CIRCLE_PADDING, this.getWidth() - (2 * BoardElement.CIRCLE_PADDING), this.getHeight() - (2 * BoardElement.CIRCLE_PADDING), BoardElement.CIRCLE_PADDING / 2, BoardElement.CIRCLE_PADDING / 2);
         // Write the number
         g2.drawString(String.format("%d", this.number), (this.getWidth()/2)-3, (this.getHeight()/2) + 4);
     }
