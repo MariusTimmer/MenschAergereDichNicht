@@ -90,20 +90,20 @@ public class MapLoader {
     
     private String readPartFromLine(String line, FILE_PART typ) {
         if ((this.isValid(line)) && (line.contains(PART_SEPARATOR)) && (typ != null)) {
-            String[] parts = line.split(PART_SEPARATOR);
+            String[] parts = line.trim().split(PART_SEPARATOR);
             switch (typ) {
                 case YPOS:
-                    return parts[0];
+                    return parts[0].trim();
                 case XPOS:
-                    return parts[1];
+                    return parts[1].trim();
                 case TYPE:
-                    return parts[2];
+                    return parts[2].trim();
                 case NEXTX:
-                    return parts[3];
+                    return parts[3].trim();
                 case NEXTY:
-                    return parts[4];
+                    return parts[4].trim();
                 case COLOR:
-                    return parts[5];
+                    return parts[5].trim();
                 default:
                     Logger.write("MapLoader::readPartFromLine bekam einen unbekannten Typen übergeben!");
                     return null;
