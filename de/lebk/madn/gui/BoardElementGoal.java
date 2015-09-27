@@ -10,10 +10,7 @@ public class BoardElementGoal extends BoardElementColored {
         super(nextElement, color);
     }
     
-    public Color getColor() {
-        return this.color;
-    }
-    
+    @Override
     public void paintComponent(Graphics g){
         super.paintComponent(g);
         int redB, greenB, blueB;
