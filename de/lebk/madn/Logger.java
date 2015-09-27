@@ -3,6 +3,14 @@ package de.lebk.madn;
 import java.io.BufferedWriter;
 import java.io.OutputStreamWriter;
 
+/**
+ * Logger-Class
+ *
+ * This class provides a formated String-output for logging
+ *
+ * @author Marius Timmer <admin@MariusTimmer.de>
+ */
+
 public class Logger {
 	
 	private static int log_line = 0;

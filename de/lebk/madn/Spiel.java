@@ -1,5 +1,10 @@
 package de.lebk.madn;
 
+/**
+ * Class that runs the game and handles all I/O
+ * @author Marius Timmer <admin@MariusTimmer.de>
+ */
+
 import de.lebk.madn.gui.Board;
 import de.lebk.madn.gui.BoardElementHome;
 import de.lebk.madn.model.Figur;
@@ -8,14 +13,19 @@ import java.awt.Color;
 
 public class Spiel {
 
-    public static final Color[] AVAILABLE_COLORS = {Color.RED, Color.BLUE, Color.YELLOW, Color.GREEN, Color.PINK, Color.ORANGE};
-    public static final int DEFAULT_DICE_MAXIMUM = 6;
-    private int dice_maximum = DEFAULT_DICE_MAXIMUM;
-    private Player[] players;
-    private Board board;
-    private long inittime;
-    private long starttime;
+    public static final Color[] AVAILABLE_COLORS = {Color.RED, Color.BLUE, Color.YELLOW, Color.GREEN, Color.PINK, Color.ORANGE};  // Array with all available colors
+    public static final int DEFAULT_DICE_MAXIMUM = 6;  // Default maximum number the dice can bring
+    private int dice_maximum = DEFAULT_DICE_MAXIMUM;   // This is the maximal number for the current dice
+    private Player[] players;  // Array that stores all players
+    private Board board;       // GUI
+    private long inittime;     // Timestamp of initialisation
+    private long starttime;    // Timestamp of starttime
 
+    /**
+     * Creates a game
+     * @param number_of_players The game will be created for this number of players
+     * @param mapfile Filename of the mapfile
+     */
     public Spiel(int number_of_players, String mapfile) {
         this.inittime = System.currentTimeMillis();
         this.initGUI(mapfile);
@@ -61,6 +71,10 @@ public class Spiel {
         return (int) (Math.random() * (this.dice_maximum - 1)) + 1;
     }
     
+    /**
+     * Creates a String that contains the current game-state
+     * @return State containing string
+     */
     @Override
     public String toString() {
         StringBuilder output = new StringBuilder();
