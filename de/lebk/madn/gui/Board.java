@@ -1,12 +1,14 @@
 package de.lebk.madn.gui;
 
 import de.lebk.madn.Coordinate;
+import de.lebk.madn.Logger;
 import de.lebk.madn.MapException;
 import de.lebk.madn.MapNoSpaceForDiceException;
 import de.lebk.madn.MapNotFoundException;
 import de.lebk.madn.MapNotParsableException;
 import de.lebk.madn.MenschAergereDichNichtException;
 import java.awt.Color;
+import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import javax.swing.JFrame;
@@ -68,8 +70,6 @@ public class Board extends JFrame {
         String[] lines = loader.readFile();
         if (lines != null) {
             int size = loader.getMapSize(lines);
-            int elem_width = ((this.getWidth()) / size);
-            BoardElement.CIRCLE_PADDING = Math.round(elem_width / 8);
             this.fields = new BoardElement[size][size];
             for (String line: lines) {
                 BoardElement.BOARD_ELEMENT_TYPES typ = loader.getTypeFromLine(line);
@@ -78,8 +78,6 @@ public class Board extends JFrame {
                 int x = objPos.getX();
                 Coordinate next = loader.getCoordinateForNextElementFromLine(line);
                 Color color;
-                int elem_left = elem_width * x;
-                int elem_top = elem_width * y;
                 BoardElement element;
                 switch (typ) {
                     case HOME:
@@ -98,22 +96,16 @@ public class Board extends JFrame {
                     default:
                         throw new MapNotParsableException(String.format("BoardElement \"%s\" is not implemented yet / unknown!", typ.toString()));
                 }
-                element.setBounds(elem_left, elem_top, elem_width, elem_width);
                 this.fields[x][y] = element;
                 this.add(this.fields[x][y]);
             }
             // Add the dice
             this.dice = new BoardDice();
-            Coordinate dicePos = this.calcDicePos();
-            if (dicePos != null) {
-                this.dice.setBounds((elem_width * dicePos.getX()) + (elem_width/8), (elem_width * dicePos.getY()) + (elem_width/8), (elem_width/4)*3, (elem_width/4)*3);
-                this.add(this.dice);
-            } else {
-                throw new MapNoSpaceForDiceException(String.format("There is no space left to draw the dice! Try to use a better mapfile!"));
-            }
+            this.add(this.dice);
+            repositioningElements();
         } else {
             // Error reading file
-            throw new MapNotFoundException(String.format("Mapfile \"%s\" not found!", mapfile));
+            throw new MapNotFoundException("No lines found in mapfile");
         }
     }
     
@@ -138,6 +130,35 @@ public class Board extends JFrame {
         }
         // There is no available place for the dice
         return null;
+    }
+    
+    private void repositioningElements() {
+        int x, y;
+        int elem_width = (Math.min(this.getWidth(), (this.getHeight() - DEFAULT_BORDER)) / this.getMapSize());
+        BoardElement.CIRCLE_PADDING = Math.round(elem_width / 8);
+        for (y = 0; y < this.getMapSize(); y++) {
+            for (x = 0; x < this.getMapSize(); x++) {
+                int elem_left = elem_width * x;
+                int elem_top = elem_width * y;
+                if (this.fields[x][y] != null) {
+                    // Just for elements
+                    this.fields[x][y].setBounds(elem_left, elem_top, elem_width, elem_width);
+                }
+            }
+        }
+        Coordinate dicePos = this.calcDicePos();
+        if (dicePos != null) {
+            this.dice.setBounds((elem_width * dicePos.getX()) + (elem_width/8), (elem_width * dicePos.getY()) + (elem_width/8), (elem_width/4)*3, (elem_width/4)*3);
+        } else {
+            // No diceposition
+            Logger.write(String.format("There is no space left to draw the dice! Try to use a better mapfile!"));
+        }
+    }
+
+    @Override
+    public void validate() {
+        super.validate();
+        this.repositioningElements();
     }
     
 }
