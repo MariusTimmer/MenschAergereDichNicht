@@ -13,7 +13,7 @@ import java.awt.Color;
 
 public class Spiel {
 
-    public static final Color[] AVAILABLE_COLORS = {Color.RED, Color.BLUE, Color.YELLOW, Color.GREEN, Color.PINK, Color.ORANGE};  // Array with all available colors
+    public static final Color[] AVAILABLE_COLORS = {Color.RED, Color.BLUE, Color.YELLOW, Color.GREEN, Color.PINK, Color.ORANGE, Color.CYAN, Color.MAGENTA, Color.GRAY};  // Array with all available colors
     public static final int DEFAULT_DICE_MAXIMUM = 6;  // Default maximum number the dice can bring
     private int dice_maximum = DEFAULT_DICE_MAXIMUM;   // This is the maximal number for the current dice
     private Player[] players;  // Array that stores all players
