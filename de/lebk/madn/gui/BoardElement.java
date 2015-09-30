@@ -8,9 +8,11 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import javax.swing.JComponent;
 
-abstract public class BoardElement extends JComponent {
+abstract public class BoardElement extends JComponent implements MouseListener {
     
     public static enum		BOARD_ELEMENT_TYPES	{HOME, WAYPOINT, GOAL};
     public static final int	FIELD_BORDER_WIDTH	= 1;
@@ -117,6 +119,31 @@ abstract public class BoardElement extends JComponent {
             g2.setColor(this.occupier.getColor());
             g2.fillOval(CIRCLE_PADDING + figure_radius, CIRCLE_PADDING + figure_radius, this.getWidth() - (2 * (figure_radius + CIRCLE_PADDING)), this.getHeight() - (2 * (figure_radius + CIRCLE_PADDING)));
         }
+    }
+    
+    @Override
+    public void mouseClicked(MouseEvent me) {
+        System.out.println("Maus wurde geklickt!");
+    }
+    
+    @Override
+    public void mouseEntered(MouseEvent me) {
+        System.out.println("Maus wurde geklickt!");
+    }
+    
+    @Override
+    public void mouseExited(MouseEvent me) {
+        System.out.println("Maus wurde geklickt!");
+    }
+    
+    @Override
+    public void mousePressed(MouseEvent me) {
+            System.out.println("Maus wurde geklickt!");
+    }
+    
+    @Override
+    public void mouseReleased(MouseEvent me) {
+            System.out.println("Maus wurde geklickt!");
     }
     
     @Override
