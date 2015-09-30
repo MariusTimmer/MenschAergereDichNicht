@@ -10,7 +10,7 @@ import javax.swing.JLabel;
 public class BoardDice extends JComponent {
     
     private int number = 1;
-    
+        
     public BoardDice() {
         super();
     }
@@ -39,7 +39,55 @@ public class BoardDice extends JComponent {
         g2.setColor(Color.BLACK);
         g2.drawRoundRect(BoardElement.CIRCLE_PADDING, BoardElement.CIRCLE_PADDING, this.getWidth() - (2 * BoardElement.CIRCLE_PADDING), this.getHeight() - (2 * BoardElement.CIRCLE_PADDING), BoardElement.CIRCLE_PADDING / 2, BoardElement.CIRCLE_PADDING / 2);
         // Write the number
-        g2.drawString(String.format("%d", this.number), (this.getWidth()/2)-3, (this.getHeight()/2) + 4);
+        this.drawPoints(g2);
     }
     
+    protected void drawPoints(Graphics g2) {
+        int dotSize = (int)(this.getWidth() / 10);
+        int number = this.number;
+        // Top Left
+        if(number >= 2) {
+            this.drawPoint(g2, this.getWidth()/3-dotSize/2, this.getHeight()/3-dotSize/2, dotSize, dotSize);
+            
+        }
+        // Top Center
+        if(number >= 8) {
+            this.drawPoint(g2, this.getWidth()/2-dotSize/2, this.getHeight()/3-dotSize/2, dotSize, dotSize);
+        }
+        // Top Right
+        if(number >= 4) {
+            this.drawPoint(g2, this.getWidth()/3*2-dotSize/2, this.getHeight()/3-dotSize/2, dotSize, dotSize);
+        }
+        
+        // Middle Left
+        if(number >= 6) {
+            this.drawPoint(g2, this.getWidth()/3-dotSize/2, this.getHeight()/2-dotSize/2, dotSize, dotSize);
+        }
+        // Middle Center
+        if(number % 2 == 1) {
+            this.drawPoint(g2, this.getWidth()/2-dotSize/2, this.getHeight()/2-dotSize/2, dotSize, dotSize);
+        }
+        // Middle Right
+        if(number >= 6) {
+            this.drawPoint(g2, this.getWidth()/3*2-dotSize/2, this.getHeight()/2-dotSize/2, dotSize, dotSize);
+        }
+        
+        // Bottom Left
+        if(number >= 4) {
+            this.drawPoint(g2, this.getWidth()/3-dotSize/2, this.getHeight()/3*2-dotSize/2, dotSize, dotSize);
+        }
+        // Bottom Center
+        if(number >= 8) {
+            this.drawPoint(g2, this.getWidth()/2-dotSize/2, this.getHeight()/3*2-dotSize/2, dotSize, dotSize);
+        }
+        // Bottom Right
+        if(number >= 2) {
+            this.drawPoint(g2, this.getWidth()/3*2-dotSize/2, this.getHeight()/3*2-dotSize/2, dotSize, dotSize);
+        }
+    }
+    
+    protected void drawPoint(Graphics g2, int x, int y, int width, int height) {
+         g2.drawOval(x, y, width, height);
+         g2.fillOval(x, y, width, height);
+    }
 }
