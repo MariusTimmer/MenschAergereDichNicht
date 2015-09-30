@@ -9,8 +9,9 @@ import javax.swing.JLabel;
 
 public class BoardDice extends JComponent {
     
-    private int number = 1;
-        
+    private int number = 9;
+    private Color color = new Color(239, 239, 239);
+    
     public BoardDice() {
         super();
     }
@@ -24,6 +25,11 @@ public class BoardDice extends JComponent {
         this.repaint();
     }
     
+    public void setColor(Color color) {
+        this.color = color;
+        this.revalidate();
+    }
+    
     /**
      * Draw the GUI
      * @param g 
@@ -33,7 +39,7 @@ public class BoardDice extends JComponent {
         Graphics2D g2 = (Graphics2D) g;
         g2.setStroke(new BasicStroke(BoardElement.FIELD_BORDER_WIDTH));
         // Lets fill the dice
-        g2.setColor(new Color(239, 239, 239));
+        g2.setColor(this.color);
         g2.fillRoundRect(BoardElement.CIRCLE_PADDING, BoardElement.CIRCLE_PADDING, this.getWidth() - (2 * BoardElement.CIRCLE_PADDING), this.getHeight() - (2 * BoardElement.CIRCLE_PADDING), BoardElement.CIRCLE_PADDING, BoardElement.CIRCLE_PADDING);
         // Draw line
         g2.setColor(Color.BLACK);
