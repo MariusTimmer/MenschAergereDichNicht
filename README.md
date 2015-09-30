@@ -4,8 +4,8 @@
 
 * Marius Timmer (<admin@MariusTimmer.de>)
 * Marvin Fischer
-* Jan-Niklas Müller-Fahlbusch (<mueller-fahlbusch.jan-niklas@web.de>)
-* Jannik Holmer (<jannik.holmer@gmx.de>)
+* Jan-Niklas Müller-Fahlbusch ()
+* Jannik Holmer ()
 
 
 ## Requirements
