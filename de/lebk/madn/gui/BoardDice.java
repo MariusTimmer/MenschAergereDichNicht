@@ -21,7 +21,7 @@ public class BoardDice extends JComponent {
      */
     public void setNumber(int number) {
         this.number = number;
-        this.repaint();
+        this.revalidate();
     }
     
     /**
