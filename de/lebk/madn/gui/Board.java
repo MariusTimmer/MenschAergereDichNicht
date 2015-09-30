@@ -35,8 +35,9 @@ public class Board extends JFrame {
      * Sets the given number to the Board
      * @param number Diced number
      */
-    public void setDice(int number) {
+    public void setDice(int number, Color color) {
         this.dice.setNumber(number);
+        this.dice.setColor(color);
     }
     
     public BoardElementHome[] getHomesOf(Color color) {

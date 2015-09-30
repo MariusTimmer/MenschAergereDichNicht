@@ -8,6 +8,7 @@ public class Player implements Comparable<Player> {
     private Color color;
     private String name;
     private Figur[] figures;
+    private boolean hasFinished;
 
     public Player(Color color) {
         this(color, new String());
@@ -16,6 +17,7 @@ public class Player implements Comparable<Player> {
     public Player(Color color, String name) {
         this.color = color;
         this.name = name;
+        this.hasFinished = false;
         this.initFigures(DEFAULT_NUMBER_OF_FIGURES);
     }
 
@@ -24,6 +26,14 @@ public class Player implements Comparable<Player> {
         for (int i = 0; i < nof; i++) {
             this.figures[i] = new Figur(this.color);
         }
+    }
+    
+    public void finished() {
+        this.hasFinished = true;
+    }
+    
+    public boolean hasFinished() {
+        return this.hasFinished;
     }
     
     private int getPositionsOfAllFigures() {

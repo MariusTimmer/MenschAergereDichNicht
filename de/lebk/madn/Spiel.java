@@ -13,13 +13,15 @@ import java.awt.Color;
 
 public class Spiel {
 
-    public static final Color[] AVAILABLE_COLORS = {Color.RED, Color.BLUE, Color.YELLOW, Color.GREEN, Color.PINK, Color.ORANGE, Color.CYAN, Color.MAGENTA, Color.GRAY};  // Array with all available colors
-    public static final int DEFAULT_DICE_MAXIMUM = 6;  // Default maximum number the dice can bring
-    private int dice_maximum = DEFAULT_DICE_MAXIMUM;   // This is the maximal number for the current dice
-    private Player[] players;  // Array that stores all players
-    private Board board;       // GUI
-    private long inittime;     // Timestamp of initialisation
-    private long starttime;    // Timestamp of starttime
+    public static final Color[]  AVAILABLE_COLORS        = {Color.RED, Color.BLUE, Color.YELLOW, Color.GREEN, Color.PINK, Color.ORANGE, Color.CYAN, Color.MAGENTA, Color.GRAY};  // Array with all available colors
+    public static final int      DEFAULT_DICE_MAXIMUM    = 6;                     // Default maximum number the dice can bring
+    private int                  dice_maximum            = DEFAULT_DICE_MAXIMUM;  // This is the maximal number for the current dice
+    private Player[]             players;                                         // Array that stores all players
+    private Board                board;                                           // GUI
+    private int                  activePlayer            = -1;                    // Index for the current player
+    private long                 inittime;                                        // Timestamp of initialisation
+    private long                 starttime;                                       // Timestamp of starttime
+    private int                  last_diced_number;
 
     /**
      * Creates a game
@@ -32,15 +34,61 @@ public class Spiel {
         this.initPlayers(number_of_players);
         this.starttime = System.currentTimeMillis();
         Logger.write(String.format("Ladezeit: %d ms", (this.starttime - this.inittime)));
+        if (!this.switchToNextPlayer()) {
+            Logger.write(String.format("Unknown error while switching to the next player"));
+        }
     }
     
-    private void initGUI(String mapfile) {
+    private boolean initGUI(String mapfile) {
         // Init the board
         try {
             this.board = new Board(mapfile);
+            return true;
         } catch (MenschAergereDichNichtException e) {
             Logger.write(String.format("Error: %s", e.getMessage()));
+            return false;
         }
+    }
+    
+    /**
+     * Checks if the game is over or if there are still running figures in the game
+     * @return True if the game is over
+     */
+    public boolean isGameOver() {
+        int runningPlayers = 0;
+        for (Player player: this.players) {
+            if (!player.hasFinished()) {
+                runningPlayers++;
+            }
+        }
+        return (runningPlayers <= 1);
+    }
+
+    /**
+     * Returns the current player
+     * @return Current player
+     */
+    public Player getCurrentPlayer() {
+        return this.players[this.activePlayer];
+    }
+
+    /**
+     * Switches to the next player
+     * @return True if a player is selected or false
+     */
+    public boolean switchToNextPlayer() {
+        int checked = 0;
+        int index;
+        while ((checked < this.players.length)) {
+            checked++;
+            index = (this.activePlayer + checked) % this.players.length;
+            if (!this.players[index].hasFinished()) {
+                this.activePlayer = index;
+                this.dice();
+                return true;
+            }
+        }
+        return false;
     }
 
     private void initPlayers(int number_of_players) {
@@ -68,7 +116,9 @@ public class Spiel {
      * @return A random number
      */
     private int dice() {
-        return (int) (Math.random() * (this.dice_maximum - 1)) + 1;
+        this.last_diced_number = (int) (Math.random() * (this.dice_maximum - 1)) + 1;
+        this.board.setDice(this.last_diced_number, this.getCurrentPlayer().getColor());
+        return this.last_diced_number;
     }
     
     /**
