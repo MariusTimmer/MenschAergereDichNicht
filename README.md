@@ -3,7 +3,7 @@
 "Mensch ärgere dich nicht" is an projectwork. It's written by:
 
 * Marius Timmer (<admin@MariusTimmer.de>)
-* Marvin Fischer (<marvinfischer1296@gmail.com>)
+* Marvin Fischer
 * Jan-Niklas Müller-Fahlbusch (<mueller-fahlbusch.jan-niklas@web.de>)
 * Jannik Holmer (<jannik.holmer@gmx.de>)
 
