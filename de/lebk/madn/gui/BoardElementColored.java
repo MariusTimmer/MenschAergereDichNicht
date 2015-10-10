@@ -8,8 +8,8 @@ public class BoardElementColored extends BoardElement {
 
     protected Color color;
 
-    public BoardElementColored(Coordinate nextElement, Color color) {
-        super(nextElement);
+    public BoardElementColored(Board board, Coordinate nextElement, Color color) {
+        super(board, nextElement);
         this.color = color;
     }
     

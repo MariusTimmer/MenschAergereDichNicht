@@ -11,7 +11,7 @@ import de.lebk.madn.model.Figur;
 import de.lebk.madn.model.Player;
 import java.awt.Color;
 
-public class Spiel {
+public class Spiel implements MADNControlInterface {
 
     public static final Color[]  AVAILABLE_COLORS        = {Color.RED, Color.BLUE, Color.YELLOW, Color.GREEN, Color.PINK, Color.ORANGE, Color.CYAN, Color.MAGENTA, Color.GRAY};  // Array with all available colors
     public static final int      DEFAULT_DICE_MAXIMUM    = 6;                     // Default maximum number the dice can bring
@@ -30,7 +30,7 @@ public class Spiel {
      */
     public Spiel(int number_of_players, String mapfile) {
         this.inittime = System.currentTimeMillis();
-        this.initGUI(mapfile);
+        this.initGUI(this, mapfile);
         this.initPlayers(number_of_players);
         this.starttime = System.currentTimeMillis();
         Logger.write(String.format("Ladezeit: %d ms", (this.starttime - this.inittime)));
@@ -39,10 +39,10 @@ public class Spiel {
         }
     }
     
-    private boolean initGUI(String mapfile) {
+    private boolean initGUI(MADNControlInterface game, String mapfile) {
         // Init the board
         try {
-            this.board = new Board(mapfile);
+            this.board = new Board(game, mapfile);
             return true;
         } catch (MenschAergereDichNichtException e) {
             Logger.write(String.format("Error: %s", e.getMessage()));
@@ -136,6 +136,26 @@ public class Spiel {
             output.append(this.players[i].toString());
         }
         return output.toString();
+    }
+
+    @Override
+    public boolean moveFigur(Figur figur, int steps) {
+        int i, k;
+        Figur target = null;
+        for (i = 0; i < this.players.length; i++) {
+            for (k = 0; k < this.players[i].getFigures().length; k++)  {
+                if (figur.equals(this.players[i].getFigures()[k])) {
+                    // Found the correct figure
+                    target = this.players[i].getFigures()[k];
+                }
+            }
+        }
+        if (target != null) {
+            target.addSteps(steps);
+            Logger.write(String.format("Figur (%s) um %d Felder gesetzt", target, steps));
+            return true;
+        }
+        return false;
     }
 
 }

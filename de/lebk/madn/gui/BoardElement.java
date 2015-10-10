@@ -19,9 +19,12 @@ abstract public class BoardElement extends JComponent implements MouseListener {
     public static int		CIRCLE_PADDING		= 0;
     protected Coordinate	nextElement;
     protected Figur		occupier		= null; /* The figure that uses this field */
+    protected Board		board;
     
-    public BoardElement(Coordinate nextElement) {
+    public BoardElement(Board board, Coordinate nextElement) {
+        this.board = board;
         this.nextElement = nextElement;
+	this.addMouseListener(this); // Register this as its own mouselistener
     }
     
     public Coordinate getNextElementPosition() {
@@ -123,27 +126,29 @@ abstract public class BoardElement extends JComponent implements MouseListener {
     
     @Override
     public void mouseClicked(MouseEvent me) {
-        System.out.println("Maus wurde geklickt!");
+        if (this.isOccupied()) {
+	    this.board.moveFigur(this.occupier);
+	}
     }
     
     @Override
     public void mouseEntered(MouseEvent me) {
-        System.out.println("Maus wurde geklickt!");
+        // Mouse is over the element
     }
     
     @Override
     public void mouseExited(MouseEvent me) {
-        System.out.println("Maus wurde geklickt!");
+        // Mouse left this element
     }
     
     @Override
     public void mousePressed(MouseEvent me) {
-            System.out.println("Maus wurde geklickt!");
+	// Mousekey pressed
     }
     
     @Override
     public void mouseReleased(MouseEvent me) {
-            System.out.println("Maus wurde geklickt!");
+	// Mousekey released
     }
     
     @Override

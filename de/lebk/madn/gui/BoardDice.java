@@ -29,6 +29,10 @@ public class BoardDice extends JComponent {
         this.color = color;
         this.revalidate();
     }
+
+    public int getNumber() {
+        return this.number;
+    }
     
     /**
      * Draw the GUI

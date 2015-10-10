@@ -16,8 +16,8 @@ package de.lebk.madn;
 
 public class MenschAergereDichNicht {
 
-    private static final String		DEFAULT_MAP_FILE			= "res/board_p4.dat";	// Default mapfile
-    private static final int		DEFAULT_NUMBER_OF_PLAYERS	= 4;					// Default number of players
+    private static final String		DEFAULT_MAP_FILE		= "res/board_p4.dat";	// Default mapfile
+    private static final int		DEFAULT_NUMBER_OF_PLAYERS	= 4;			// Default number of players
 
     /**
      * This is the main-method for the game

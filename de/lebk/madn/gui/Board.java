@@ -2,11 +2,13 @@ package de.lebk.madn.gui;
 
 import de.lebk.madn.Coordinate;
 import de.lebk.madn.Logger;
+import de.lebk.madn.MADNControlInterface;
 import de.lebk.madn.MapException;
 import de.lebk.madn.MapNoSpaceForDiceException;
 import de.lebk.madn.MapNotFoundException;
 import de.lebk.madn.MapNotParsableException;
 import de.lebk.madn.MenschAergereDichNichtException;
+import de.lebk.madn.model.Figur;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
@@ -21,9 +23,11 @@ public class Board extends JFrame {
     private ArrayList<BoardElementGoal>	goals;
     private BoardElement[][]		fields;
     private BoardDice			dice;
+    private MADNControlInterface	game;
 
-    public Board(String mapfile) throws MenschAergereDichNichtException {
+    public Board(MADNControlInterface game, String mapfile) throws MenschAergereDichNichtException {
         super("Mensch ärgere dich nicht");
+        this.game = game;
         this.setSize(DEFAULT_SIZE, DEFAULT_SIZE + DEFAULT_BORDER);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLayout(null);
@@ -83,15 +87,15 @@ public class Board extends JFrame {
                 switch (typ) {
                     case HOME:
                         color = loader.getColorFromLine(line);
-                        this.homes.add(new BoardElementHome(next, color));
+                        this.homes.add(new BoardElementHome(this, next, color));
                         element = (BoardElement) this.homes.get(this.homes.size()-1);
                         break;
                     case WAYPOINT:
-                        element = new BoardElementWaypoint(next);
+                        element = new BoardElementWaypoint(this, next);
                         break;
                     case GOAL:
                         color = loader.getColorFromLine(line);
-                        this.goals.add(new BoardElementGoal(next, color));
+                        this.goals.add(new BoardElementGoal(this, next, color));
                         element = (BoardElement) this.goals.get(this.goals.size()-1);
                         break;
                     default:
@@ -160,6 +164,10 @@ public class Board extends JFrame {
     public void validate() {
         super.validate();
         this.repositioningElements();
+    }
+    
+    public void moveFigur(Figur figur) {
+        this.game.moveFigur(figur, this.dice.getNumber());
     }
     
 }
