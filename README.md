@@ -25,3 +25,7 @@ You can add the following (optional) arguments:
 
 * `MAPFILE=<filename>`      # To load a special mapfile
 * `NOP=<number of player>`  # To use a special number of player
+
+## How to play
+
+To start a game just run the application (with special or default settings). After the board has appeard the dice shows which player has to do the next step. The dice will show a new random number. Then the player can choose which figure he or she wants to move by clicking on the figure.
