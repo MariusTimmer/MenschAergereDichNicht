@@ -1,0 +1,16 @@
+======
+ TODO 
+======
+
+This file contains the next steps we need to implement. If you find bugs in
+the code, please add them to the bugtracker on github as issue or contact us
+directly per mail. Then we will check if it is a bug or a unclear behavior
+of the application. Real bugs will be added in this file of todos.
+
+2015/10/11 - timmer
+A simple action can be transported from the gui over the board and the
+gameinterface to the game itself. It is able to increase the position of a
+selected figure without updating the gui. TODO:
+* Update the new position of a figure in the gui
+* Let the gamelogic check if the figure is able to move and if a other
+  figure will be replaced.
