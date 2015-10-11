@@ -29,6 +29,10 @@ public class Figur implements Comparable<Figur> {
         return String.format("Figur (%s)", this.getColor().toString());
     }
 
+    public boolean equals(Figur other) {
+        return ((this.color == other.color) && (this.position == other.position));
+    }
+
     @Override
     public int compareTo(Figur other) {
         return Integer.compare(this.position, other.position);
