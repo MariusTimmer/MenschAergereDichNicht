@@ -11,29 +11,36 @@ import de.lebk.madn.MenschAergereDichNichtException;
 import de.lebk.madn.model.Figur;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import javax.swing.JFrame;
 
 public class Board extends JFrame {
     
-    public static final int		DEFAULT_SIZE	= 800;
-    public static final int		DEFAULT_BORDER	= 48;
-    private ArrayList<BoardElementHome>	homes;
-    private ArrayList<BoardElementGoal>	goals;
-    private BoardElement[][]		fields;
-    private BoardDice			dice;
-    private MADNControlInterface	game;
+    public static final int             DEFAULT_SIZE	= 800;
+    public static final int             DEFAULT_BORDER	= 48;
+    private ArrayList<BoardElementHome> homes;
+    private ArrayList<BoardElementGoal> goals;
+    private BoardElement[][]            fields;
+    private BoardDice                   dice;
+    private MADNControlInterface        game;
 
     public Board(MADNControlInterface game, String mapfile) throws MenschAergereDichNichtException {
         super("Mensch ärgere dich nicht");
         this.game = game;
-        this.setSize(DEFAULT_SIZE, DEFAULT_SIZE + DEFAULT_BORDER);
+        this.setSize(this.getScreenHeight() - DEFAULT_BORDER, this.getScreenHeight());
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLayout(null);
         this.initFields(mapfile);
         this.setVisible(true);
     }
+	
+	public int getScreenHeight() {
+		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+		return gd.getDisplayMode().getHeight();
+	}
     
     /**
      * Sets the given number to the Board
