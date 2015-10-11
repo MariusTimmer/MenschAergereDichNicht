@@ -39,7 +39,7 @@ public class Logger {
 	 * @return True if succeed of false if an error occured
 	 */
 	public static boolean write(Object sender, String message) {
-		return Logger.write(sender.getClass().getSimpleName(), message);
+		return Logger.write(String.format("(% 10s) %s", sender.getClass().getSimpleName(), message));
 	}
 	
 }
