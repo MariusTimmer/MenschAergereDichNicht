@@ -14,21 +14,27 @@ import javax.swing.JComponent;
 
 abstract public class BoardElement extends JComponent implements MouseListener {
     
-    public static enum		BOARD_ELEMENT_TYPES	{HOME, WAYPOINT, GOAL};
-    public static final int	FIELD_BORDER_WIDTH	= 1;
-    public static int		CIRCLE_PADDING		= 0;
-    protected Coordinate	nextElement;
-    protected Figur		occupier		= null; /* The figure that uses this field */
-    protected Board		board;
+    public static enum      BOARD_ELEMENT_TYPES {HOME, WAYPOINT, GOAL};
+    public static final int FIELD_BORDER_WIDTH  = 1;
+    public static int       CIRCLE_PADDING      = 0;
+    protected Coordinate    position;
+    protected Coordinate    nextElement;
+    protected Figur         occupier            = null; /* The figure that uses this field */
+    protected Board         board;
     
-    public BoardElement(Board board, Coordinate nextElement) {
+    public BoardElement(Board board, Coordinate position, Coordinate nextElement) {
         this.board = board;
+        this.position = position;
         this.nextElement = nextElement;
-	this.addMouseListener(this); // Register this as its own mouselistener
+        this.addMouseListener(this); // Register this as its own mouselistener
     }
     
     public Coordinate getNextElementPosition() {
         return this.nextElement;
+    }
+	
+    public Coordinate getPosition() {
+        return this.position;
     }
 
     /**
@@ -112,7 +118,7 @@ abstract public class BoardElement extends JComponent implements MouseListener {
     }
     
     protected void drawOccupier(Graphics g) {
-        if (this.isOccupied()) {
+		if (this.isOccupied()) {
             // draw this field as occupied
             Graphics2D g2 = (Graphics2D) g;
             int figure_radius = Math.round((this.getWidth() - (2 * CIRCLE_PADDING)) / 4);
@@ -127,7 +133,7 @@ abstract public class BoardElement extends JComponent implements MouseListener {
     @Override
     public void mouseClicked(MouseEvent me) {
         if (this.isOccupied()) {
-	    this.board.moveFigur(this.occupier);
+	    this.board.moveFigur(this.position, this.occupier);
 	}
     }
     

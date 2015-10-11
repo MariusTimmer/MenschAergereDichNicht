@@ -6,6 +6,7 @@ package de.lebk.madn;
  */
 
 import de.lebk.madn.gui.Board;
+import de.lebk.madn.gui.BoardElement;
 import de.lebk.madn.gui.BoardElementHome;
 import de.lebk.madn.model.Figur;
 import de.lebk.madn.model.Player;
@@ -22,6 +23,7 @@ public class Spiel implements MADNControlInterface {
     private long                 inittime;                                        // Timestamp of initialisation
     private long                 starttime;                                       // Timestamp of starttime
     private int                  last_diced_number;
+    private boolean              waitingForInteraction   = false;
 
     /**
      * Creates a game
@@ -48,6 +50,10 @@ public class Spiel implements MADNControlInterface {
             Logger.write(String.format("Error: %s", e.getMessage()));
             return false;
         }
+    }
+
+    public boolean IsWaitingForInteraction() {
+        return this.waitingForInteraction;
     }
     
     /**
@@ -118,6 +124,7 @@ public class Spiel implements MADNControlInterface {
     private int dice() {
         this.last_diced_number = (int) (Math.random() * (this.dice_maximum - 1)) + 1;
         this.board.setDice(this.last_diced_number, this.getCurrentPlayer().getColor());
+		this.waitingForInteraction = true;
         return this.last_diced_number;
     }
     
@@ -138,22 +145,51 @@ public class Spiel implements MADNControlInterface {
         return output.toString();
     }
 
+	protected BoardElement calculateBoardElement(BoardElement source, int steps) {
+		int i;
+		Coordinate nextPosition = source.getNextElementPosition();
+		for (i = 1; i <= steps; i++) {
+			if (nextPosition == null) {
+				// To many steps / not enough fields
+				return null;
+			}
+			source = this.board.getBoardElement(nextPosition);
+			nextPosition = source.getNextElementPosition();
+		}
+		return source;
+	}
+
     @Override
-    public boolean moveFigur(Figur figur, int steps) {
-        int i, k;
-        Figur target = null;
-        for (i = 0; i < this.players.length; i++) {
-            for (k = 0; k < this.players[i].getFigures().length; k++)  {
-                if (figur.equals(this.players[i].getFigures()[k])) {
-                    // Found the correct figure
-                    target = this.players[i].getFigures()[k];
+    public boolean moveFigur(Coordinate position, Figur figur, int steps) {
+        if (this.waitingForInteraction) {
+            int i, k;
+            Figur target = null;
+            for (i = 0; i < this.players.length; i++) {
+                for (k = 0; k < this.players[i].getFigures().length; k++)  {
+                    if (figur.equals(this.players[i].getFigures()[k])) {
+                        // Found the correct figure
+                        target = this.players[i].getFigures()[k];
+                    }
                 }
             }
-        }
-        if (target != null) {
-            target.addSteps(steps);
-            Logger.write(String.format("Figur (%s) um %d Felder gesetzt", target, steps));
-            return true;
+            if (target != null) {
+				BoardElement currentField, targetField;
+				currentField = this.board.getBoardElement(position);
+				targetField = this.calculateBoardElement(currentField, steps);
+				if (targetField.isOccupied()) {
+					Logger.write(this, String.format("Target is occupied already!"));
+					return false;
+				}
+                target.addSteps(steps);
+				targetField.occupie(target);
+				currentField.occupie(null);
+				this.waitingForInteraction = false;
+                Logger.write(String.format("Figur (%s) moved %d fields", target, steps));
+                return true;
+            }
+        } else {
+            // Not waiting for interaction
+            Logger.write(String.format("Can not move figure %s, not waiting for interaction", figur));
         }
         return false;
     }

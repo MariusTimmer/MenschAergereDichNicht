@@ -94,15 +94,15 @@ public class Board extends JFrame {
                 switch (typ) {
                     case HOME:
                         color = loader.getColorFromLine(line);
-                        this.homes.add(new BoardElementHome(this, next, color));
+                        this.homes.add(new BoardElementHome(this, objPos, next, color));
                         element = (BoardElement) this.homes.get(this.homes.size()-1);
                         break;
                     case WAYPOINT:
-                        element = new BoardElementWaypoint(this, next);
+                        element = new BoardElementWaypoint(this, objPos, next);
                         break;
                     case GOAL:
                         color = loader.getColorFromLine(line);
-                        this.goals.add(new BoardElementGoal(this, next, color));
+                        this.goals.add(new BoardElementGoal(this, objPos, next, color));
                         element = (BoardElement) this.goals.get(this.goals.size()-1);
                         break;
                     default:
@@ -173,8 +173,31 @@ public class Board extends JFrame {
         this.repositioningElements();
     }
     
-    public void moveFigur(Figur figur) {
-        this.game.moveFigur(figur, this.dice.getNumber());
+    public void moveFigur(Coordinate position, Figur figur) {
+        this.game.moveFigur(position, figur, this.dice.getNumber());
     }
+	
+	/**
+	 * Just calls getBoardElement(int x, int y)
+	 * @param c Coordinates
+	 * @return Null if the coordinates are invalid or there is no element or the BoardElement
+	 */
+	public BoardElement getBoardElement(Coordinate c) {
+		return this.getBoardElement(c.getX(), c.getY());
+	}
+	
+	/**
+	 * Returns the BoardElement which is placed at (x/y)
+	 * @param x X-Coordinate
+	 * @param y Y-Coordinate
+	 * @return Null if the coordinates are invalid or there is no element or the BoardElement
+	 */
+	public BoardElement getBoardElement(int x, int y) {
+		if ((x < 0) || (y < 0) || (x >= this.fields.length) || (y >= this.fields[x].length)) {
+			// Coordinates are not valid
+			return null;
+		}
+		return this.fields[x][y];
+	}
     
 }

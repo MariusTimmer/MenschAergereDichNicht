@@ -6,8 +6,8 @@ import java.awt.Graphics;
 
 public class BoardElementHome extends BoardElementColored {
     
-    public BoardElementHome(Board board, Coordinate nextElement, Color color) {
-        super(board, nextElement, color);
+    public BoardElementHome(Board board, Coordinate position, Coordinate nextElement, Color color) {
+        super(board, position, nextElement, color);
     }
     
     @Override

@@ -4,6 +4,6 @@ import de.lebk.madn.model.Figur;
 
 public interface MADNControlInterface {
 
-    public boolean moveFigur(Figur figur, int steps);
+    public boolean moveFigur(Coordinate position, Figur figur, int steps);
 
 }

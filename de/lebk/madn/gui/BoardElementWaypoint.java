@@ -6,8 +6,8 @@ import java.awt.Graphics;
 
 public class BoardElementWaypoint extends BoardElement {
 
-    public BoardElementWaypoint(Board board, Coordinate nextElement) {
-        super(board, nextElement);
+    public BoardElementWaypoint(Board board, Coordinate position, Coordinate nextElement) {
+        super(board, position, nextElement);
     }
     
     @Override
