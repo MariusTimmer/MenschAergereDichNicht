@@ -77,7 +77,7 @@ abstract public class BoardElement extends JComponent implements MouseListener {
     private void setOccupierPrivate(Figur figure) {
         this.occupier = figure;
         this.revalidate();
-        //this.repaint();
+        this.repaint();
     }
     
     public void occupierLeaves() {
