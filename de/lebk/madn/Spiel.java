@@ -11,6 +11,7 @@ import de.lebk.madn.gui.BoardElementHome;
 import de.lebk.madn.model.Figur;
 import de.lebk.madn.model.Player;
 import java.awt.Color;
+import java.awt.HeadlessException;
 
 public class Spiel implements MADNControlInterface {
 
@@ -32,7 +33,12 @@ public class Spiel implements MADNControlInterface {
      */
     public Spiel(int number_of_players, String mapfile) {
         this.inittime = System.currentTimeMillis();
-        this.initGUI(this, mapfile);
+        try {
+            this.initGUI(this, mapfile);
+        } catch (HeadlessException e) {
+            Logger.write("There is no display-variable set! Make sure your X-Server is running.");
+            System.exit(-1);
+        }
         this.initPlayers(number_of_players);
         this.starttime = System.currentTimeMillis();
         Logger.write(String.format("Ladezeit: %d ms", (this.starttime - this.inittime)));
