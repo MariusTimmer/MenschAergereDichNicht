@@ -177,27 +177,27 @@ public class Board extends JFrame {
         this.game.moveFigur(position, figur, this.dice.getNumber());
     }
 	
-	/**
-	 * Just calls getBoardElement(int x, int y)
-	 * @param c Coordinates
-	 * @return Null if the coordinates are invalid or there is no element or the BoardElement
-	 */
-	public BoardElement getBoardElement(Coordinate c) {
-		return this.getBoardElement(c.getX(), c.getY());
-	}
+    /**
+     * Just calls getBoardElement(int x, int y)
+     * @param c Coordinates
+     * @return Null if the coordinates are invalid or there is no element or the BoardElement
+     */
+    public BoardElement getBoardElement(Coordinate c) {
+        return this.getBoardElement(c.getX(), c.getY());
+    }
 	
-	/**
-	 * Returns the BoardElement which is placed at (x/y)
-	 * @param x X-Coordinate
-	 * @param y Y-Coordinate
-	 * @return Null if the coordinates are invalid or there is no element or the BoardElement
-	 */
-	public BoardElement getBoardElement(int x, int y) {
-		if ((x < 0) || (y < 0) || (x >= this.fields.length) || (y >= this.fields[x].length)) {
-			// Coordinates are not valid
-			return null;
-		}
-		return this.fields[x][y];
+    /**
+     * Returns the BoardElement which is placed at (x/y)
+     * @param x X-Coordinate
+     * @param y Y-Coordinate
+     * @return Null if the coordinates are invalid or there is no element or the BoardElement
+     */
+    public BoardElement getBoardElement(int x, int y) {
+	if ((x < 0) || (y < 0) || (x >= this.fields.length) || (y >= this.fields[x].length)) {
+		// Coordinates are not valid
+		return null;
 	}
+	return this.fields[x][y];
+    }
     
 }
