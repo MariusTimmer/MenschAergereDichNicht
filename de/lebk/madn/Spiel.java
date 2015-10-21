@@ -151,53 +151,79 @@ public class Spiel implements MADNControlInterface {
         return output.toString();
     }
 
-	protected BoardElement calculateBoardElement(BoardElement source, int steps) {
-		int i;
-		Coordinate nextPosition = source.getNextElementPosition();
-		for (i = 1; i <= steps; i++) {
-			if (nextPosition == null) {
-				// To many steps / not enough fields
-				return null;
-			}
-			source = this.board.getBoardElement(nextPosition);
-			nextPosition = source.getNextElementPosition();
-		}
-		return source;
-	}
+    /**
+     * Returns the Field which is steps next to the source
+     * @param source Source from which we have to read the next position
+     * @param steps Amount of steps
+     * @return Field
+     */
+    protected BoardElement calculateBoardElement(BoardElement source, int steps) {
+        if (steps > 0) {
+            Coordinate nextCoordinate = source.getNextElementPosition();
+            if (nextCoordinate == null) {
+                // To many steps / not enough fields
+                return null;
+            }
+            source = this.calculateBoardElement(this.board.getBoardElement(nextCoordinate), (steps - 1));
+        }
+        return source;
+    }
 
     @Override
     public boolean moveFigur(Coordinate position, Figur figur, int steps) {
         if (this.waitingForInteraction) {
-            int i, k;
-            Figur target = null;
-            for (i = 0; i < this.players.length; i++) {
-                for (k = 0; k < this.players[i].getFigures().length; k++)  {
-                    if (figur.equals(this.players[i].getFigures()[k])) {
-                        // Found the correct figure
-                        target = this.players[i].getFigures()[k];
-                    }
-                }
-            }
+            Figur target = this.getFigur(figur, this.activePlayer);
             if (target != null) {
-				BoardElement currentField, targetField;
-				currentField = this.board.getBoardElement(position);
-				targetField = this.calculateBoardElement(currentField, steps);
-				if (targetField.isOccupied()) {
-					Logger.write(this, String.format("Target is occupied already!"));
-					return false;
-				}
+                BoardElement currentField, targetField;
+                currentField = this.board.getBoardElement(position);
+                targetField = this.calculateBoardElement(currentField, steps);
+                if (targetField.isOccupied()) {
+                    Logger.write(String.format("Target is occupied already!"));
+                    // @todo: Field is occupied by another figure
+                    return false;
+                }
                 target.addSteps(steps);
-				targetField.occupie(target);
-				currentField.occupie(null);
-				this.waitingForInteraction = false;
+                targetField.occupie(target);
+                currentField.free();
+                this.waitingForInteraction = false;
                 Logger.write(String.format("Figur (%s) moved %d fields", target, steps));
                 return true;
+            } else {
+                Logger.write(String.format("Player %s has to do this move!", this.players[this.activePlayer]));
             }
         } else {
             // Not waiting for interaction
             Logger.write(String.format("Can not move figure %s, not waiting for interaction", figur));
         }
         return false;
+    }
+
+    private Figur getFigur(Figur figur)
+    {
+        int i;
+        for (i = 0; i < this.players.length; i++) {
+            if (this.getFigur(figur, i) != null) {
+                return this.getFigur(figur, i);
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Compares the figure figur with the playerfigures and returns the correct playerfigure if found
+     * @param figur Figure to return from the playerfigures
+     * @return Playerfigure
+     */    
+    private Figur getFigur(Figur figur, int i)
+    {
+        int k;
+        for (k = 0; k < this.players[i].getFigures().length; k++)  {
+            if (figur.equals(this.players[i].getFigures()[k])) {
+                // Found the correct figure
+                return this.players[i].getFigures()[k];
+            }
+        }
+        return null;
     }
 
 }
