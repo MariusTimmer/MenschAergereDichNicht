@@ -38,8 +38,8 @@ abstract public class BoardElement extends JComponent implements MouseListener {
     }
 
     /**
-     * 
-     *
+     * Returns the coordinate of the next element
+     * @return Coordinate of the next element
      */
     public Coordinate getNextCoordinate() {
         return this.nextElement;
@@ -59,6 +59,16 @@ abstract public class BoardElement extends JComponent implements MouseListener {
      */
     public boolean isOccupied() {
         return (this.occupier != null);
+    }
+
+    /**
+     * Frees this field / Un-occupies it
+     */
+    public void free()
+    {
+        this.occupier = null;
+        this.revalidate();
+        this.repaint();
     }
     
     /**
@@ -164,7 +174,7 @@ abstract public class BoardElement extends JComponent implements MouseListener {
     
     @Override
     public String toString() {
-        return String.format("%s", this.getClass().getSimpleName());
+        return String.format("%s [%d/%d]", this.getClass().getSimpleName(), this.position.getX(), this.position.getY());
     }
     
 }
