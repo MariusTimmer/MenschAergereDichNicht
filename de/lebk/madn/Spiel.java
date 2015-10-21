@@ -17,6 +17,7 @@ public class Spiel implements MADNControlInterface {
 
     public static final Color[]  AVAILABLE_COLORS        = {Color.RED, Color.BLUE, Color.YELLOW, Color.GREEN, Color.PINK, Color.ORANGE, Color.CYAN, Color.MAGENTA, Color.GRAY};  // Array with all available colors
     public static final int      DEFAULT_DICE_MAXIMUM    = 6;                     // Default maximum number the dice can bring
+    private static final boolean AUTOSTART               = true;
     private int                  dice_maximum            = DEFAULT_DICE_MAXIMUM;  // This is the maximal number for the current dice
     private Player[]             players;                                         // Array that stores all players
     private Board                board;                                           // GUI
@@ -42,8 +43,8 @@ public class Spiel implements MADNControlInterface {
         this.initPlayers(number_of_players);
         this.starttime = System.currentTimeMillis();
         Logger.write(String.format("Ladezeit: %d ms", (this.starttime - this.inittime)));
-        if (!this.switchToNextPlayer()) {
-            Logger.write(String.format("Unknown error while switching to the next player"));
+        if (AUTOSTART) {
+            this.postFigurMove();
         }
     }
     
@@ -56,6 +57,16 @@ public class Spiel implements MADNControlInterface {
             Logger.write(String.format("Error: %s", e.getMessage()));
             return false;
         }
+    }
+
+    public void waitingForInteraction()
+    {
+        this.waitingForInteraction = true;
+    }
+    
+    public void notWaitingForInteraction()
+    {
+        this.waitingForInteraction = false;
     }
 
     public boolean IsWaitingForInteraction() {
@@ -130,7 +141,6 @@ public class Spiel implements MADNControlInterface {
     private int dice() {
         this.last_diced_number = (int) (Math.random() * (this.dice_maximum - 1)) + 1;
         this.board.setDice(this.last_diced_number, this.getCurrentPlayer().getColor());
-		this.waitingForInteraction = true;
         return this.last_diced_number;
     }
     
@@ -187,6 +197,9 @@ public class Spiel implements MADNControlInterface {
                 currentField.free();
                 this.waitingForInteraction = false;
                 Logger.write(String.format("Figur (%s) moved %d fields", target, steps));
+                if (AUTOSTART) {
+                    this.postFigurMove();
+                }
                 return true;
             } else {
                 Logger.write(String.format("Player %s has to do this move!", this.players[this.activePlayer]));
@@ -196,6 +209,23 @@ public class Spiel implements MADNControlInterface {
             Logger.write(String.format("Can not move figure %s, not waiting for interaction", figur));
         }
         return false;
+    }
+
+    private void playerSwitch()
+    {
+        // @todo: Implement player-switch-code
+        if (!this.switchToNextPlayer()) {
+            Logger.write(String.format("Unknown error while switching to the next player"));
+        }
+    }
+
+    private void postFigurMove()
+    {
+        if (AUTOSTART) {
+            this.playerSwitch();
+            this.dice();
+            this.waitingForInteraction = true;
+        }
     }
 
     private Figur getFigur(Figur figur)
@@ -225,5 +255,5 @@ public class Spiel implements MADNControlInterface {
         }
         return null;
     }
-
+    
 }
