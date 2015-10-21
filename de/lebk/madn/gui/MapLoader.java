@@ -98,9 +98,9 @@ public class MapLoader {
                     return parts[1].trim();
                 case TYPE:
                     return parts[2].trim();
-                case NEXTX:
-                    return parts[3].trim();
                 case NEXTY:
+                    return parts[3].trim();
+                case NEXTX:
                     return parts[4].trim();
                 case COLOR:
                     return parts[5].trim();
