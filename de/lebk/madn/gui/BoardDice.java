@@ -23,11 +23,13 @@ public class BoardDice extends JComponent {
     public void setNumber(int number) {
         this.number = number;
         this.revalidate();
+        this.repaint();
     }
     
     public void setColor(Color color) {
         this.color = color;
         this.revalidate();
+        this.repaint();
     }
 
     public int getNumber() {
