@@ -1,0 +1,12 @@
+#!/bin/sh
+
+###
+#
+# Cleaningscript to remove all *.class and *~ files
+#
+# date 2015/10/21
+# author Marius Timmer
+#
+###
+
+rm $(find . -name "*.class") $(find . -name "*~")
