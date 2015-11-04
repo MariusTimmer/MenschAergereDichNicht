@@ -13,11 +13,10 @@ import de.lebk.madn.model.Player;
 import java.awt.Color;
 import java.awt.HeadlessException;
 
-public class Spiel implements MADNControlInterface {
+public class Spiel extends ActionManager implements MADNControlInterface {
 
     public static final Color[]  AVAILABLE_COLORS        = {Color.RED, Color.BLUE, Color.YELLOW, Color.GREEN, Color.PINK, Color.ORANGE, Color.CYAN, Color.MAGENTA, Color.GRAY};  // Array with all available colors
     public static final int      DEFAULT_DICE_MAXIMUM    = 6;                     // Default maximum number the dice can bring
-    private static final boolean AUTOSTART               = true;
     private int                  dice_maximum            = DEFAULT_DICE_MAXIMUM;  // This is the maximal number for the current dice
     private Player[]             players;                                         // Array that stores all players
     private Board                board;                                           // GUI
@@ -25,7 +24,6 @@ public class Spiel implements MADNControlInterface {
     private long                 inittime;                                        // Timestamp of initialisation
     private long                 starttime;                                       // Timestamp of starttime
     private int                  last_diced_number;
-    private boolean              waitingForInteraction   = false;
 
     /**
      * Creates a game
@@ -42,10 +40,8 @@ public class Spiel implements MADNControlInterface {
         }
         this.initPlayers(number_of_players);
         this.starttime = System.currentTimeMillis();
-        Logger.write(String.format("Ladezeit: %d ms", (this.starttime - this.inittime)));
-        if (AUTOSTART) {
-            this.postFigurMove();
-        }
+        Logger.write(String.format("Loadingtime: %d ms", (this.starttime - this.inittime)));
+        this.postFigurMove();
     }
     
     private boolean initGUI(MADNControlInterface game, String mapfile) {
@@ -59,20 +55,6 @@ public class Spiel implements MADNControlInterface {
         }
     }
 
-    public void waitingForInteraction()
-    {
-        this.waitingForInteraction = true;
-    }
-    
-    public void notWaitingForInteraction()
-    {
-        this.waitingForInteraction = false;
-    }
-
-    public boolean IsWaitingForInteraction() {
-        return this.waitingForInteraction;
-    }
-    
     /**
      * Checks if the game is over or if there are still running figures in the game
      * @return True if the game is over
@@ -107,7 +89,7 @@ public class Spiel implements MADNControlInterface {
             index = (this.activePlayer + checked) % this.players.length;
             if (!this.players[index].hasFinished()) {
                 this.activePlayer = index;
-                this.dice();
+                this.setCurrentAction(AVAILABLE_ACTIONS.DICE);
                 return true;
             }
         }
@@ -179,9 +161,19 @@ public class Spiel implements MADNControlInterface {
         return source;
     }
 
+    public void userDice()
+    {
+        if (this.isWaitingForDice()) {
+            this.dice();
+            Logger.write(String.format("Wurf vom Nutzer durchgefuehrt"));
+            // @todo: Validation
+            this.setCurrentAction(AVAILABLE_ACTIONS.CHOOSE_FIGURE);
+        }
+    }
+
     @Override
     public boolean moveFigur(Coordinate position, Figur figur, int steps) {
-        if (this.waitingForInteraction) {
+        if (this.isWaitingForChooseFigure()) {
             Figur target = this.getFigur(figur, this.activePlayer);
             if (target != null) {
                 BoardElement currentField, targetField;
@@ -195,11 +187,9 @@ public class Spiel implements MADNControlInterface {
                 target.addSteps(steps);
                 targetField.occupie(target);
                 currentField.free();
-                this.waitingForInteraction = false;
+                this.setCurrentAction(AVAILABLE_ACTIONS.NONE);
                 Logger.write(String.format("Figur (%s) moved %d fields", target, steps));
-                if (AUTOSTART) {
-                    this.postFigurMove();
-                }
+                this.postFigurMove();
                 return true;
             } else {
                 Logger.write(String.format("Player %s has to do this move!", this.players[this.activePlayer]));
@@ -221,11 +211,8 @@ public class Spiel implements MADNControlInterface {
 
     private void postFigurMove()
     {
-        if (AUTOSTART) {
-            this.playerSwitch();
-            this.dice();
-            this.waitingForInteraction = true;
-        }
+        this.playerSwitch();
+        this.setCurrentAction(AVAILABLE_ACTIONS.DICE);
     }
 
     private Figur getFigur(Figur figur)
