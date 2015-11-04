@@ -17,6 +17,7 @@ public class BoardDice extends JComponent implements MouseListener {
     public BoardDice(Board board) {
         super();
         this.board = board;
+        this.addMouseListener(this);
     }
     
     /**
