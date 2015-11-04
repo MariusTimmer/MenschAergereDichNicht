@@ -112,7 +112,7 @@ public class Board extends JFrame {
                 this.add(this.fields[x][y]);
             }
             // Add the dice
-            this.dice = new BoardDice();
+            this.dice = new BoardDice(this);
             this.add(this.dice);
             repositioningElements();
         } else {
@@ -175,6 +175,10 @@ public class Board extends JFrame {
     
     public void moveFigur(Coordinate position, Figur figur) {
         this.game.moveFigur(position, figur, this.dice.getNumber());
+    }
+    
+    public void useDice() {
+        this.game.userDice();
     }
 	
     /**
