@@ -37,10 +37,10 @@ public class Board extends JFrame {
         this.setVisible(true);
     }
 	
-	public int getScreenHeight() {
-		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-		return gd.getDisplayMode().getHeight();
-	}
+    public int getScreenHeight() {
+        GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+        return gd.getDisplayMode().getHeight();
+    }
     
     /**
      * Sets the given number to the Board
