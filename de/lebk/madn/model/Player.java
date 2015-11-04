@@ -28,6 +28,16 @@ public class Player implements Comparable<Player> {
         }
     }
     
+    public boolean isInGame() {
+        boolean inGame = false;
+        for (Figur figur: this.figures) {
+            if (!figur.isAtHome()) {
+                inGame = true;
+            }
+        }
+        return inGame;
+    }
+    
     public void finished() {
         this.hasFinished = true;
     }
