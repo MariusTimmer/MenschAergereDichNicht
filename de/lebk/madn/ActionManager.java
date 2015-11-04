@@ -12,6 +12,11 @@ class ActionManager {
     public static enum AVAILABLE_ACTIONS {NONE, DICE, CHOOSE_FIGURE};
     private AVAILABLE_ACTIONS current_action = AVAILABLE_ACTIONS.NONE;
     
+    protected void setCurrentAction(AVAILABLE_ACTIONS action)
+    {
+        this.current_action = action;
+    }
+
     public AVAILABLE_ACTIONS getCurrentAction()
     {
         return this.current_action;
