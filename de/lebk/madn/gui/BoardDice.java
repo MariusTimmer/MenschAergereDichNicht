@@ -4,16 +4,19 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import javax.swing.JComponent;
-import javax.swing.JLabel;
 
-public class BoardDice extends JComponent {
+public class BoardDice extends JComponent implements MouseListener {
     
     private int number = 9;
     private Color color = new Color(239, 239, 239);
+    protected Board board;
     
-    public BoardDice() {
+    public BoardDice(Board board) {
         super();
+        this.board = board;
     }
     
     /**
@@ -101,5 +104,40 @@ public class BoardDice extends JComponent {
     protected void drawPoint(Graphics g2, int x, int y, int width, int height) {
          g2.drawOval(x, y, width, height);
          g2.fillOval(x, y, width, height);
+    }
+    
+    @Override
+    public void mouseClicked(MouseEvent me) {
+        this.board.useDice();
+    }
+    
+    @Override
+    public void mouseEntered(MouseEvent me) {
+        // Mouse is over the element
+    }
+    
+    @Override
+    public void mouseExited(MouseEvent me) {
+        // Mouse left this element
+    }
+    
+    @Override
+    public void mousePressed(MouseEvent me) {
+	// Mousekey pressed
+    }
+    
+    @Override
+    public void mouseReleased(MouseEvent me) {
+	// Mousekey released
+    }
+    
+    @Override
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+    }
+    
+    @Override
+    public String toString() {
+        return String.format("Number: %d", this.number);
     }
 }
