@@ -13,14 +13,18 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import javax.swing.JFrame;
 
-public class Board extends JFrame {
+public class Board extends JFrame implements KeyListener {
     
     public static final int             DEFAULT_SIZE	= 800;
     public static final int             DEFAULT_BORDER	= 48;
+    public static final char            DEFAULT_DICE_KEY = 'w';
+    protected char                      dice_key;
     private ArrayList<BoardElementHome> homes;
     private ArrayList<BoardElementGoal> goals;
     private BoardElement[][]            fields;
@@ -35,6 +39,8 @@ public class Board extends JFrame {
         this.setLayout(null);
         this.initFields(mapfile);
         this.setVisible(true);
+        this.dice_key = DEFAULT_DICE_KEY;
+        this.addKeyListener(this);
     }
 	
     public int getScreenHeight() {
@@ -202,6 +208,22 @@ public class Board extends JFrame {
 		return null;
 	}
 	return this.fields[x][y];
+    }
+    
+    public void keyTyped(KeyEvent e)
+    {
+    }
+
+    public void keyPressed(KeyEvent e)
+    {
+        if (e.getKeyChar() == this.dice_key)
+        {
+            this.game.userDice();
+        }
+    }
+    
+    public void keyReleased(KeyEvent e)
+    {
     }
     
 }
