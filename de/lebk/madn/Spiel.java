@@ -41,6 +41,7 @@ public class Spiel extends ActionManager implements MADNControlInterface {
             System.exit(-1);
         }
         this.initPlayers(number_of_players);
+        this.board.setDice(0, this.players[0].getColor());
         this.starttime = System.currentTimeMillis();
         Logger.write(String.format("Loadingtime: %d ms", (this.starttime - this.inittime)));
         this.postFigurMove();
