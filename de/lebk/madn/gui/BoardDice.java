@@ -10,8 +10,8 @@ import javax.swing.JComponent;
 
 public class BoardDice extends JComponent implements MouseListener {
     
-    private int number = 9;
-    private Color color = new Color(239, 239, 239);
+    private int number = 0;
+    private Color color = new Color(255, 255, 255);// new Color(239, 239, 239);
     protected Board board;
     
     public BoardDice(Board board) {
