@@ -24,6 +24,8 @@ public class Spiel extends ActionManager implements MADNControlInterface {
     private long                 inittime;                                        // Timestamp of initialisation
     private long                 starttime;                                       // Timestamp of starttime
     private int                  last_diced_number;
+    private int                  round                   = 0;
+    private int                  thrown_dices_this_round;
 
     /**
      * Creates a game
@@ -83,6 +85,7 @@ public class Spiel extends ActionManager implements MADNControlInterface {
      */
     public boolean switchToNextPlayer() {
         int checked = 0;
+        int lastIndex = this.activePlayer;
         int index;
         while ((checked < this.players.length)) {
             checked++;
@@ -90,10 +93,24 @@ public class Spiel extends ActionManager implements MADNControlInterface {
             if (!this.players[index].hasFinished()) {
                 this.activePlayer = index;
                 this.setCurrentAction(AVAILABLE_ACTIONS.DICE);
+                if (lastIndex > index) {
+                    this.onNewRound();
+                }
+                this.onUserChanged();
                 return true;
             }
         }
         return false;
+    }
+    
+    protected void onNewRound()
+    {
+        this.round++;
+    }
+    
+    protected void onUserChanged()
+    {
+        this.thrown_dices_this_round = 0;
     }
 
     private void initPlayers(int number_of_players) {
@@ -120,10 +137,28 @@ public class Spiel extends ActionManager implements MADNControlInterface {
      * Let the dice fall
      * @return A random number
      */
-    private int dice() {
-        this.last_diced_number = (int) (Math.random() * (this.dice_maximum - 1)) + 1;
-        this.board.setDice(this.last_diced_number, this.getCurrentPlayer().getColor());
-        return this.last_diced_number;
+     private void dice()
+     {
+        boolean isInit;
+        isInit = ((this.thrown_dices_this_round < 3) && (!this.getCurrentPlayer().isInGame()));
+        if ((isInit) || (this.thrown_dices_this_round == 0)) {
+            // This action is allowed
+            this.last_diced_number = (int) (Math.random() * (this.dice_maximum)) + 1;
+            this.board.setDice(this.last_diced_number, this.getCurrentPlayer().getColor());
+            this.thrown_dices_this_round++;
+            boolean next_not_init         = !isInit;
+            boolean next_init_six_thrown  = ((isInit) && (this.last_diced_number == 6));
+            boolean next_init_round_ended = ((isInit) && (this.thrown_dices_this_round >= 3));
+            if (next_not_init || next_init_six_thrown) {
+                // Select a figure to move
+                this.setCurrentAction(AVAILABLE_ACTIONS.CHOOSE_FIGURE);
+            } else if (next_init_round_ended) {
+                // Player is not allowed to select a figure to move
+                this.switchToNextPlayer();
+            }
+        } else {
+            // Not allowed to throw the dice
+        }
     }
     
     /**
@@ -164,10 +199,8 @@ public class Spiel extends ActionManager implements MADNControlInterface {
     public void userDice()
     {
         if (this.isWaitingForDice()) {
-            this.dice();
             Logger.write(String.format("Wurf vom Nutzer durchgefuehrt"));
-            // @todo: Validation
-            this.setCurrentAction(AVAILABLE_ACTIONS.CHOOSE_FIGURE);
+            this.dice();
         }
     }
 
