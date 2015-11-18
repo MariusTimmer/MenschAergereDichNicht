@@ -150,8 +150,11 @@ public class Spiel extends ActionManager implements MADNControlInterface {
             boolean next_not_init         = !isInit;
             boolean next_init_six_thrown  = ((isInit) && (this.last_diced_number == 6));
             boolean next_init_round_ended = ((isInit) && (this.thrown_dices_this_round >= 3));
-            if (next_not_init || next_init_six_thrown) {
-                // Select a figure to move
+            if (next_init_six_thrown) {
+                // Init and six is thrown
+                this.last_diced_number = 1;
+                this.setCurrentAction(AVAILABLE_ACTIONS.CHOOSE_FIGURE);
+            } else if (next_not_init) {
                 this.setCurrentAction(AVAILABLE_ACTIONS.CHOOSE_FIGURE);
             } else if (next_init_round_ended) {
                 // Player is not allowed to select a figure to move
@@ -159,6 +162,7 @@ public class Spiel extends ActionManager implements MADNControlInterface {
             }
         } else {
             // Not allowed to throw the dice
+            this.last_diced_number = 0;
         }
     }
     
