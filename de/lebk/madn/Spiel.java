@@ -228,6 +228,7 @@ public class Spiel extends ActionManager implements MADNControlInterface {
                 this.setCurrentAction(AVAILABLE_ACTIONS.NONE);
                 Logger.write(String.format("Figur (%s) moved %d fields", target, steps));
                 this.postFigurMove();
+                this.board.setDice(0, this.getCurrentPlayer().getColor());
                 return true;
             } else {
                 Logger.write(String.format("Player %s has to do this move!", this.players[this.activePlayer]));
