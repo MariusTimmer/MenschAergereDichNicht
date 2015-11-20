@@ -7,9 +7,17 @@ the code, please add them to the bugtracker on github as issue or contact us
 directly per mail. Then we will check if it is a bug or a unclear behavior
 of the application. Real bugs will be added in this file of todos.
 
+[Legend: (*) Needs to be implemented / fixed; (+) is done]
+IMPORTANT: Deadline is 2th of december 2015!
+
+2015/11/20 - timmer
+* Seperate the board-logic and the board-gui
+* Bring figure to his goal if a round is done
+* Implement networkinterface (Waiting for mail)
+
 2015/11/04 - timmer
-* Inizialen Würfel auf (irgendetwas) setzen
-* Farbe des Würfels beim Spielerwechsel ändern; nicht wenn Spieler Figur
++ Inizialen Würfel auf (irgendetwas) setzen
++ Farbe des Würfels beim Spielerwechsel ändern; nicht wenn Spieler Figur
   auswählen muss
 * Statusanzeige in GUI einbauen
 
@@ -17,6 +25,6 @@ of the application. Real bugs will be added in this file of todos.
 A simple action can be transported from the gui over the board and the
 gameinterface to the game itself. It is able to increase the position of a
 selected figure without updating the gui. TODO:
-* Update the new position of a figure in the gui
-* Let the gamelogic check if the figure is able to move and if a other
++ Update the new position of a figure in the gui
++ Let the gamelogic check if the figure is able to move and if a other
   figure will be replaced.
