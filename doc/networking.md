@@ -2,7 +2,7 @@
 **Wie das Netzwerk-Interface funktioniert**
 
 
-Zuständige Entwickler:
+Zuständige Entwickler: Marius Timmer
 Noch niemand
 
 
