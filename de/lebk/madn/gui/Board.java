@@ -19,6 +19,13 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import javax.swing.JFrame;
 
+/** 
+ * The GUI that represents the board of the game and with which the player(s) will
+ * interact during the game if they are not using the network-interface.
+ * @date 2015/10
+ * @author Marius Timmer
+ */
+
 public class Board extends JFrame implements KeyListener {
     
     public static final int             DEFAULT_SIZE	= 800;
@@ -31,6 +38,12 @@ public class Board extends JFrame implements KeyListener {
     private BoardDice                   dice;
     private MADNControlInterface        game;
 
+    /**
+     * Generates the board-gui
+     * @param game The gamecontroler
+     * @param mapfile Path to the mapfile to load
+     * @throws MenschAergereDichNichtException For the case an error occours
+     */
     public Board(MADNControlInterface game, String mapfile) throws MenschAergereDichNichtException {
         super("Mensch ärgere dich nicht");
         this.game = game;
@@ -42,7 +55,11 @@ public class Board extends JFrame implements KeyListener {
         this.dice_key = DEFAULT_DICE_KEY;
         this.addKeyListener(this);
     }
-	
+
+    /**
+     * Detects the screen-resolution of the current monitor
+     * @return pixels
+     */
     public int getScreenHeight() {
         GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         return gd.getDisplayMode().getHeight();
@@ -57,6 +74,11 @@ public class Board extends JFrame implements KeyListener {
         this.dice.setColor(color);
     }
     
+    /** 
+     * Finds the home-fields for a special color/player
+     * @param color Color of the player which owns the wanted homes
+     * @resturn All home-fields for the wanted user/color
+     */
     public BoardElementHome[] getHomesOf(Color color) {
         LinkedList<BoardElementHome> homes = new LinkedList<>();
         for (BoardElementHome home: this.homes) {
@@ -67,6 +89,11 @@ public class Board extends JFrame implements KeyListener {
         return homes.toArray(new BoardElementHome[homes.size()]);
     }
     
+    /** 
+     * Finds the goal-fields for a special color/player
+     * @param color Color of the player which owns the wanted goals
+     * @return All goal-fields for the wanted user/color
+     */
     public BoardElementGoal[] getGoalsOf(Color color) {
         LinkedList<BoardElementGoal> goals = new LinkedList<>();
         for (BoardElementGoal goal: this.goals) {
@@ -77,10 +104,19 @@ public class Board extends JFrame implements KeyListener {
         return goals.toArray(new BoardElementGoal[goals.size()]);
     }
     
+    /**
+     * Determinates the size of this map (One side).
+     * @return Size of a side of the map
+     */
     public int getMapSize() {
         return this.fields.length;
     }
     
+    /**
+     * Initiates the fields on the board (read by file)
+     * @param mapfile The path to the mapfile which should be loaded
+     * @throws MapException if an error occours
+     */
     private void initFields(String mapfile) throws MapException {
         MapLoader loader = new MapLoader(mapfile);
         this.homes = new ArrayList<>();
@@ -127,10 +163,18 @@ public class Board extends JFrame implements KeyListener {
         }
     }
     
+    /**
+     * Checks if the given position is available
+     * @param c Coordinate which should be checked
+     * @return True if the coordinate is available or false
+     */
     private boolean isPositionAvailable(Coordinate c) {
         return (this.fields[c.getX()][c.getY()] == null);
     }
     
+    /**
+     * Calculate the position whre the dice shuld be positioned
+     */
     private Coordinate calcDicePos() {
         Coordinate c = new Coordinate(Math.round(this.getMapSize()/2), Math.round(this.getMapSize()/2));
         if (this.isPositionAvailable(c)) {
@@ -150,6 +194,9 @@ public class Board extends JFrame implements KeyListener {
         return null;
     }
     
+    /**
+     * Resizes the elements in the frame and sets new positions
+     */
     private void repositioningElements() {
         int x, y;
         int elem_width = (Math.min(this.getWidth(), (this.getHeight() - DEFAULT_BORDER)) / this.getMapSize());
@@ -173,16 +220,27 @@ public class Board extends JFrame implements KeyListener {
         }
     }
 
+    /**
+     * Resized the elements in the frame if it is resized
+     */
     @Override
     public void validate() {
         super.validate();
         this.repositioningElements();
     }
     
+    /** 
+     * Calls the moveFigur-method in the gamecontroller
+     * @param position The coordinate from which the figure should be moved
+     * @param figur The figure which should be moved
+     */
     public void moveFigur(Coordinate position, Figur figur) {
         this.game.moveFigur(position, figur, this.dice.getNumber());
     }
     
+    /**
+     * Calls the dice-method in the gamecontroller
+     */
     public void useDice() {
         this.game.userDice();
     }
@@ -210,10 +268,19 @@ public class Board extends JFrame implements KeyListener {
 	return this.fields[x][y];
     }
     
+    /**
+     * Will be called when a key is typed
+     * @param e The event which called this method
+     */
     public void keyTyped(KeyEvent e)
     {
     }
 
+    /**
+     * Will be called when a key is pressed. It is able to tell
+     * the game to throw the dice.
+     * @param e The event which called this method
+     */
     public void keyPressed(KeyEvent e)
     {
         if (e.getKeyChar() == this.dice_key)
@@ -222,6 +289,10 @@ public class Board extends JFrame implements KeyListener {
         }
     }
     
+    /**
+     * Will be called when a key will be released
+     * @param e The event which called this method
+     */
     public void keyReleased(KeyEvent e)
     {
     }
