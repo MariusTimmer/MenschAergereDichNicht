@@ -3,7 +3,7 @@ package de.lebk.madn;
 /**
  * This class stores coordinates which will be used for the fields on the board
  * @author Marius Timmer <admin@MariusTimmer.de>
- * @date 2015-09-16
+ * @date 2015/09/16
  */
 
 public class Coordinate {
