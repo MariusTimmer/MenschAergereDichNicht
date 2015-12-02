@@ -8,6 +8,7 @@ package de.lebk.madn;
 import de.lebk.madn.gui.Board;
 import de.lebk.madn.gui.BoardElement;
 import de.lebk.madn.gui.BoardElementHome;
+import de.lebk.madn.gui.BoardElementWaypoint;
 import de.lebk.madn.model.Figur;
 import de.lebk.madn.model.Player;
 import java.awt.Color;
@@ -192,6 +193,14 @@ public class Spiel extends ActionManager implements MADNControlInterface {
     protected BoardElement calculateBoardElement(BoardElement source, int steps) {
         if (steps > 0) {
             Coordinate nextCoordinate = source.getNextElementPosition();
+            if (source instanceof BoardElementWaypoint) {
+                if (this.board.isAlternativeAvailable(source.getPosition(), this.activePlayer)) {
+                    Coordinate temp = ((BoardElementWaypoint)source).getAlternative();
+                    if (temp != null) {
+                        nextCoordinate = temp;
+                    }
+                }
+            }
             if (nextCoordinate == null) {
                 // To many steps / not enough fields
                 return null;
