@@ -264,6 +264,11 @@ public class Spiel extends ActionManager implements MADNControlInterface {
         }
         return null;
     }
+    
+    public Player getPlayer(int id)
+    {
+        return this.players[id];
+    }
 
     /**
      * Compares the figure figur with the playerfigures and returns the correct playerfigure if found
