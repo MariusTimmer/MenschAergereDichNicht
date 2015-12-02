@@ -45,7 +45,7 @@ public class MapLoader {
             int y = Integer.valueOf(this.readPartFromLine(line, FILE_PART.ALTERNATIVE_Y));
             return new Coordinate(x, y);
         } catch (Exception e) {
-            Logger.write(String.format("MapLoader::getCoordinateForNextElementFromLine: Can not parse a coordinate from line \"%s\"!", line));
+            Logger.write(String.format("MapLoader::getCoordinateForNextElementFromLine: Can not parse a coordinate from line \"%s\": %s!", line, e.getMessage()));
             return null;
         }
     }
@@ -156,6 +156,8 @@ public class MapLoader {
                         return parts[4].trim();
                     case COLOR:
                         return parts[5].trim();
+		    case ALTERNATIVE_Y:
+                        return parts[6].trim();
                     default:
                         Logger.write("MapLoader::readPartFromLine unknown type!");
                         return null;
