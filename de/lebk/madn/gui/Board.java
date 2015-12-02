@@ -9,6 +9,7 @@ import de.lebk.madn.MapNotFoundException;
 import de.lebk.madn.MapNotParsableException;
 import de.lebk.madn.MenschAergereDichNichtException;
 import de.lebk.madn.model.Figur;
+import de.lebk.madn.model.Player;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.GraphicsDevice;
@@ -272,6 +273,19 @@ public class Board extends JFrame implements KeyListener {
 		return null;
 	}
 	return this.fields[x][y];
+    }
+    
+    public boolean isAlternativeAvailable(Coordinate current_coordinate, int player)
+    {
+	BoardElement current_field = this.getBoardElement(current_coordinate);
+	if (current_field instanceof BoardElementWaypoint) {
+            BoardElementWaypoint wp = (BoardElementWaypoint) current_field;
+            Coordinate alternative_coordinate = wp.getAlternative();
+            Color fieldcolor = ((BoardElementColored)this.getBoardElement(alternative_coordinate)).getColor();
+            return (fieldcolor ==  this.game.getPlayer(player).getColor());
+	} else {
+            return false;
+	}
     }
     
     /**
