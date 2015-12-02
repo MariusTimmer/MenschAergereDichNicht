@@ -139,7 +139,14 @@ public class Board extends JFrame implements KeyListener {
                         element = (BoardElement) this.homes.get(this.homes.size()-1);
                         break;
                     case WAYPOINT:
-                        element = new BoardElementWaypoint(this, objPos, next);
+			if (loader.hasAlternative(line)) {
+				// Alternative way found
+				Coordinate alternative = loader.getCoordinateForAlternative(line);
+				element = new BoardElementWaypoint(this, objPos, next, alternative);
+			} else {
+				// There is no alternativ way
+				element = new BoardElementWaypoint(this, objPos, next);
+			}
                         break;
                     case GOAL:
                         color = loader.getColorFromLine(line);
