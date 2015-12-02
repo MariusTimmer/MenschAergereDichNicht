@@ -22,7 +22,6 @@ import javax.swing.JFrame;
 /** 
  * The GUI that represents the board of the game and with which the player(s) will
  * interact during the game if they are not using the network-interface.
- * @date 2015/10
  * @author Marius Timmer
  */
 
@@ -77,7 +76,7 @@ public class Board extends JFrame implements KeyListener {
     /** 
      * Finds the home-fields for a special color/player
      * @param color Color of the player which owns the wanted homes
-     * @resturn All home-fields for the wanted user/color
+     * @return All home-fields for the wanted user/color
      */
     public BoardElementHome[] getHomesOf(Color color) {
         LinkedList<BoardElementHome> homes = new LinkedList<>();
