@@ -44,7 +44,7 @@ public class BoardElementWaypoint extends BoardElement {
      * Gets an alternative following point
      * @return alternative Coordinate
      */
-    public void getAlternative()
+    public Coordinate getAlternative()
     {
 	return this.alternative;
     }
