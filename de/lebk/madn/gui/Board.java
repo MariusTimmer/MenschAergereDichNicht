@@ -281,12 +281,29 @@ public class Board extends JFrame implements KeyListener {
 	if ((current_field instanceof BoardElementWaypoint) && (((BoardElementWaypoint)current_field).hasAlternative())) {
             BoardElementWaypoint wp = (BoardElementWaypoint) current_field;
             Coordinate alternative_coordinate = wp.getAlternative();
-            Logger.write(String.format("Alternative Koordinate: %s", alternative_coordinate));
-            Color fieldcolor = ((BoardElementColored)this.getBoardElement(alternative_coordinate)).getColor();
-            return (fieldcolor ==  this.game.getPlayer(player).getColor());
+            if (alternative_coordinate != null) {
+                Color fieldcolor = ((BoardElementColored)this.getBoardElement(alternative_coordinate)).getColor();
+                return (this.sameColor(fieldcolor, this.game.getPlayer(player).getColor()));
+            } else {
+                Logger.write(String.format("The mapfile is corrupt! The alternative point of %s is null!", current_coordinate));
+                return false;
+            }
 	} else {
             return false;
 	}
+    }
+
+    /**
+     * Checks if color a and color b are the same colors
+     * @param a Color to compare color B to
+     * @param b Color to compare color A to
+     * @return True if the colors  have the same color-value or false
+     */
+    public boolean sameColor(Color a, Color b)
+    {
+        return ((a.getRed() == b.getRed()) &&
+                (a.getGreen() == b.getGreen()) &&
+                (a.getBlue() == b.getBlue()));
     }
     
     /**
