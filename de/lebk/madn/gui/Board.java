@@ -278,9 +278,10 @@ public class Board extends JFrame implements KeyListener {
     public boolean isAlternativeAvailable(Coordinate current_coordinate, int player)
     {
 	BoardElement current_field = this.getBoardElement(current_coordinate);
-	if (current_field instanceof BoardElementWaypoint) {
+	if ((current_field instanceof BoardElementWaypoint) && (((BoardElementWaypoint)current_field).hasAlternative())) {
             BoardElementWaypoint wp = (BoardElementWaypoint) current_field;
             Coordinate alternative_coordinate = wp.getAlternative();
+            Logger.write(String.format("Alternative Koordinate: %s", alternative_coordinate));
             Color fieldcolor = ((BoardElementColored)this.getBoardElement(alternative_coordinate)).getColor();
             return (fieldcolor ==  this.game.getPlayer(player).getColor());
 	} else {
