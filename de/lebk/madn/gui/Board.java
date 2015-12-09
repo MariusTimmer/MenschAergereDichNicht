@@ -282,8 +282,9 @@ public class Board extends JFrame implements KeyListener {
             BoardElementWaypoint wp = (BoardElementWaypoint) current_field;
             Coordinate alternative_coordinate = wp.getAlternative();
             if (alternative_coordinate != null) {
-                Color fieldcolor = ((BoardElementColored)this.getBoardElement(alternative_coordinate)).getColor();
-                return (this.sameColor(fieldcolor, this.game.getPlayer(player).getColor()));
+                Color fieldcolor  = ((BoardElementColored)this.getBoardElement(alternative_coordinate)).getColor();
+                Color playercolor = this.game.getPlayer(player).getColor();
+                return (this.sameColor(fieldcolor, playercolor));
             } else {
                 Logger.write(String.format("The mapfile is corrupt! The alternative point of %s is null!", current_coordinate));
                 return false;
