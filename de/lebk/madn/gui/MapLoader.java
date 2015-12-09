@@ -43,7 +43,7 @@ public class MapLoader {
         try {
             int x = Integer.valueOf(this.readPartFromLine(line, FILE_PART.COLOR));
             int y = Integer.valueOf(this.readPartFromLine(line, FILE_PART.ALTERNATIVE_Y));
-            return new Coordinate(x, y);
+            return new Coordinate(y, x); // Don't ask, jut accept it
         } catch (Exception e) {
             Logger.write(String.format("MapLoader::getCoordinateForNextElementFromLine: Can not parse a coordinate from line \"%s\": %s!", line, e.getMessage()));
             return null;
