@@ -73,37 +73,69 @@ public class Board extends JFrame implements KeyListener {
         this.dice.setNumber(number);
         this.dice.setColor(color);
     }
-    
+
     /** 
      * Finds the home-fields for a special color/player
      * @param color Color of the player which owns the wanted homes
      * @return All home-fields for the wanted user/color
      */
     public BoardElementHome[] getHomesOf(Color color) {
-        LinkedList<BoardElementHome> homes = new LinkedList<>();
-        for (BoardElementHome home: this.homes) {
-            if (home.isSameColor(color)) {
-                homes.add(home);
-            }
-        }
-        return homes.toArray(new BoardElementHome[homes.size()]);
+		int i, k = 0;
+		BoardElementHome[] player_homes = new BoardElementHome[4];
+		for (i = 0; i < this.homes.size(); i++) {
+			if (this.homes.get(i).isSameColor(color)) {
+				player_homes[k] = this.homes.get(i);
+				k++;
+			}
+		}
+	    return player_homes;
     }
-    
+
+	/**
+	 * Searchs the field which is occupied by the given figure
+	 * @param figure Figure which field should be searched
+	 * @return The field or null if no field was found
+	 */
+	public BoardElement getFieldOfFigure(Figur figure) {
+		int x, y;
+		for (y = 0; y < this.fields.length; y++) {
+			for (x = 0; x < this.fields[y].length; x++) {
+				if (this.fields[y][x].getOccupier().equals(figure)) {
+					return this.fields[y][x];
+				}
+			}
+		}
+		return null;
+	}
+
     /** 
      * Finds the goal-fields for a special color/player
      * @param color Color of the player which owns the wanted goals
      * @return All goal-fields for the wanted user/color
      */
     public BoardElementGoal[] getGoalsOf(Color color) {
-        LinkedList<BoardElementGoal> goals = new LinkedList<>();
-        for (BoardElementGoal goal: this.goals) {
-            if (goal.isSameColor(color)) {
-                goals.add(goal);
-            }
-        }
-        return goals.toArray(new BoardElementGoal[goals.size()]);
+		int i, k = 0;
+	    BoardElementGoal[] player_goals = new BoardElementGoal[4];
+	    for (i = 0; i < this.goals.size(); i++) {
+		    if (this.goals.get(i).isSameColor(color)) {
+				player_goals[k] = this.goals.get(i);
+				k++;
+			}
+		}
+		return player_goals;
     }
-    
+
+    public boolean moveFigureAtHome(Figur figur) {
+	    BoardElementHome[] player_homes = this.getHomesOf(figur.getColor());
+	    for (int i = 0; i < player_homes.length; i++) {
+		    if (!player_homes[i].isOccupied()) {
+			    player_homes[i].occupie(figur);
+			    return true;
+		    }
+	    }
+	    return false;
+    }
+
     /**
      * Determinates the size of this map (One side).
      * @return Size of a side of the map
@@ -111,7 +143,7 @@ public class Board extends JFrame implements KeyListener {
     public int getMapSize() {
         return this.fields.length;
     }
-    
+
     /**
      * Initiates the fields on the board (read by file)
      * @param mapfile The path to the mapfile which should be loaded
