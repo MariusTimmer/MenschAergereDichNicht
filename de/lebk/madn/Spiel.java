@@ -210,12 +210,41 @@ public class Spiel extends ActionManager implements MADNControlInterface {
         return source;
     }
 
+	/**
+	 * This function uses the intern dice (if the game is waiting for the dice)
+	 */
     public void userDice()
     {
         if (this.isWaitingForDice()) {
             Logger.write(String.format("Wurf vom Nutzer durchgefuehrt"));
             this.dice();
         }
+    }
+
+    public boolean attack(BoardElement hitpoint, Figur victim, Figur aggressor) {
+	    if (victim.getColor() == aggressor.getColor()) {
+			Logger.write(this, String.format("Player (%s) can not attack its own figure!", aggressor.toString()));
+			return false;
+		}
+		if (this.board.moveFigureAtHome(victim)) {
+			hitpoint.free();
+			if (hitpoint.occupie(aggressor)) {
+				BoardElement aggressor_field = this.board.getFieldOfFigure(aggressor);
+				if (aggressor_field != null) {
+					aggressor_field.free();
+					return (!aggressor_field.isOccupied());
+				} else {
+					Logger.write(this, String.format("Field of aggressor (%s) can't be found!", aggressor.toString()));
+					return false;
+				}
+			} else {
+				Logger.write(this, String.format("Can not set aggressor %s to field (%s)", aggressor.toString(), hitpoint.toString()));
+				return false;
+			}
+		} else {
+			Logger.write(this, String.format("Can not set %s to its home", victim.toString()));
+			return false;
+		}
     }
 
     @Override
@@ -227,9 +256,8 @@ public class Spiel extends ActionManager implements MADNControlInterface {
                 currentField = this.board.getBoardElement(position);
                 targetField = this.calculateBoardElement(currentField, steps);
                 if (targetField.isOccupied()) {
-                    Logger.write(String.format("Target is occupied already!"));
-                    // @todo: Field is occupied by another figure
-                    return false;
+					// Attack the occupieing player
+					return this.attack(targetField, targetField.getOccupier(), figur);
                 }
                 target.addSteps(steps);
                 targetField.occupie(target);
