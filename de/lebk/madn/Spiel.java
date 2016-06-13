@@ -216,8 +216,12 @@ public class Spiel extends ActionManager implements MADNControlInterface {
     public void userDice()
     {
         if (this.isWaitingForDice()) {
-            Logger.write(String.format("Wurf vom Nutzer durchgefuehrt"));
             this.dice();
+            Logger.write(String.format(
+                "%s hat eine %d gewürfelt",
+                this.getCurrentPlayer().toString(),
+                this.last_diced_number
+            ));
         }
     }
 
