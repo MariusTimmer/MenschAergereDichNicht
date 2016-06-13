@@ -1,7 +1,6 @@
 package de.lebk.madn.gui;
 
 import de.lebk.madn.Coordinate;
-import de.lebk.madn.Logger;
 import de.lebk.madn.model.Figur;
 import de.lebk.madn.model.Player;
 import java.awt.BasicStroke;
@@ -130,12 +129,23 @@ abstract public class BoardElement extends JComponent implements MouseListener {
     protected void drawOccupier(Graphics g) {
 		if (this.isOccupied()) {
             // draw this field as occupied
+            /**
+             * The delta value will be used to change the color of the
+             * occupier. The figures shouldn't have the exact same color
+             * as the field background.
+             */
+            float delta = 0.75f;
+            Color figure_color = new Color(
+                Math.min(Math.round(this.occupier.getColor().getRed() * delta), 255),
+                Math.min(Math.round(this.occupier.getColor().getGreen() * delta), 255),
+                Math.min(Math.round(this.occupier.getColor().getBlue() * delta), 255)
+            );
             Graphics2D g2 = (Graphics2D) g;
             int figure_radius = Math.round((this.getWidth() - (2 * CIRCLE_PADDING)) / 4);
             g2.setStroke(new BasicStroke(3));
             g2.setColor(Color.BLACK);
             g2.drawOval(CIRCLE_PADDING + figure_radius, CIRCLE_PADDING + figure_radius, this.getWidth() - (2 * (figure_radius + CIRCLE_PADDING)), this.getHeight() - (2 * (figure_radius + CIRCLE_PADDING)));
-            g2.setColor(this.occupier.getColor());
+            g2.setColor(figure_color);
             g2.fillOval(CIRCLE_PADDING + figure_radius, CIRCLE_PADDING + figure_radius, this.getWidth() - (2 * (figure_radius + CIRCLE_PADDING)), this.getHeight() - (2 * (figure_radius + CIRCLE_PADDING)));
         }
     }
