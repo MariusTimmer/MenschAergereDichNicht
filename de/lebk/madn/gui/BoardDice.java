@@ -47,24 +47,43 @@ public class BoardDice extends JComponent implements MouseListener {
     public void paint(Graphics g) {
         super.paint(g);
         Graphics2D g2 = (Graphics2D) g;
+        /**
+         * here the colors will be prepared. The dice will be filled
+         * with the original color of the current player. The border
+         * an the points of the dice will be in the same color just
+         * a bit darker.
+         * Delta describes the difference of the border and point
+         * color from the original color.
+         */
+        float delta = 0.33f;
+        Color background_color = new Color(
+            Math.min(Math.round(this.color.getRed() * delta), 255),
+            Math.min(Math.round(this.color.getGreen() * delta), 255),
+            Math.min(Math.round(this.color.getBlue() * delta), 255)
+        );
         g2.setStroke(new BasicStroke(BoardElement.FIELD_BORDER_WIDTH));
-        // Lets fill the dice
+        /**
+         * First we draw the dice with the original color as background.
+         */
         g2.setColor(this.color);
         g2.fillRoundRect(BoardElement.CIRCLE_PADDING, BoardElement.CIRCLE_PADDING, this.getWidth() - (2 * BoardElement.CIRCLE_PADDING), this.getHeight() - (2 * BoardElement.CIRCLE_PADDING), BoardElement.CIRCLE_PADDING, BoardElement.CIRCLE_PADDING);
-        // Draw line
-        g2.setColor(Color.BLACK);
+        /**
+         * After drawing the background we have to draw the border line
+         * in the darker color. This color will be used to draw the
+         * points on the dice as well then.
+         */
+        g2.setColor(background_color);
         g2.drawRoundRect(BoardElement.CIRCLE_PADDING, BoardElement.CIRCLE_PADDING, this.getWidth() - (2 * BoardElement.CIRCLE_PADDING), this.getHeight() - (2 * BoardElement.CIRCLE_PADDING), BoardElement.CIRCLE_PADDING / 2, BoardElement.CIRCLE_PADDING / 2);
-        // Write the number
-        this.drawPoints(g2);
+        this.drawPoints(g2, background_color);
     }
     
-    protected void drawPoints(Graphics g2) {
+    protected void drawPoints(Graphics g2, Color point_color) {
+        g2.setColor(point_color);
         int dotSize = (int)(this.getWidth() / 10);
         int number = this.number;
         // Top Left
         if(number >= 2) {
             this.drawPoint(g2, this.getWidth()/3-dotSize/2, this.getHeight()/3-dotSize/2, dotSize, dotSize);
-            
         }
         // Top Center
         if(number >= 8) {
@@ -74,7 +93,6 @@ public class BoardDice extends JComponent implements MouseListener {
         if(number >= 4) {
             this.drawPoint(g2, this.getWidth()/3*2-dotSize/2, this.getHeight()/3-dotSize/2, dotSize, dotSize);
         }
-        
         // Middle Left
         if(number >= 6) {
             this.drawPoint(g2, this.getWidth()/3-dotSize/2, this.getHeight()/2-dotSize/2, dotSize, dotSize);
@@ -87,7 +105,6 @@ public class BoardDice extends JComponent implements MouseListener {
         if(number >= 6) {
             this.drawPoint(g2, this.getWidth()/3*2-dotSize/2, this.getHeight()/2-dotSize/2, dotSize, dotSize);
         }
-        
         // Bottom Left
         if(number >= 4) {
             this.drawPoint(g2, this.getWidth()/3-dotSize/2, this.getHeight()/3*2-dotSize/2, dotSize, dotSize);
