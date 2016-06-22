@@ -91,22 +91,35 @@ public class Board extends JFrame implements KeyListener {
 	    return player_homes;
     }
 
-	/**
-	 * Searchs the field which is occupied by the given figure
-	 * @param figure Figure which field should be searched
-	 * @return The field or null if no field was found
-	 */
-	public BoardElement getFieldOfFigure(Figur figure) {
-		int x, y;
-		for (y = 0; y < this.fields.length; y++) {
-			for (x = 0; x < this.fields[y].length; x++) {
-				if (this.fields[y][x].getOccupier().equals(figure)) {
-					return this.fields[y][x];
-				}
-			}
-		}
-		return null;
-	}
+    /**
+     * Searchs the field which is occupied by the given figure
+     * @param figure Figure which field should be searched
+     * @return The field or null if no field was found
+     */
+    public BoardElement getFieldOfFigure(Figur figure) {
+        int x, y;
+        for (y = 0; y < this.fields.length; y++) {
+            for (x = 0; x < this.fields[y].length; x++) {
+                BoardElement current_field = this.fields[y][x];
+                if (current_field != null) {
+                    /**
+                     * We have to be sure that the current field we are
+                     * checking does exists to prevent a NullPointerException.
+                     */
+                    Figur current_figure = current_field.getOccupier();
+                    if ((current_figure != null) && (current_figure.equals(figure))) {
+                        /**
+                         * Additionally we have to check if the occupier is set and
+                         * if so if it is the wanted figure. If we have found the
+                         * field of the wanted figure, we can return the current field.
+                         */
+                        return current_field;
+                    }
+                }
+            }
+        }
+        return null;
+    }
 
     /** 
      * Finds the goal-fields for a special color/player
