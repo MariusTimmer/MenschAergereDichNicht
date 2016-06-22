@@ -225,30 +225,106 @@ public class Spiel extends ActionManager implements MADNControlInterface {
         }
     }
 
+    /**
+     * This function attacks the figure which occupies a target field and
+     * sends it back home before the aggressor will occupy the target.
+     * @param hitpoint BoardElement on which the figures meet and attack
+     * @param victim The figure which will be sent home
+     * @param aggressor Figure which attacks the victim to occupy the field
+     * @return True if everything worked of false in case of an error.
+     */
     public boolean attack(BoardElement hitpoint, Figur victim, Figur aggressor) {
-	    if (victim.getColor() == aggressor.getColor()) {
-			Logger.write(this, String.format("Player (%s) can not attack its own figure!", aggressor.toString()));
-			return false;
-		}
-		if (this.board.moveFigureAtHome(victim)) {
-			hitpoint.free();
-			if (hitpoint.occupie(aggressor)) {
-				BoardElement aggressor_field = this.board.getFieldOfFigure(aggressor);
-				if (aggressor_field != null) {
-					aggressor_field.free();
-					return (!aggressor_field.isOccupied());
-				} else {
-					Logger.write(this, String.format("Field of aggressor (%s) can't be found!", aggressor.toString()));
-					return false;
-				}
-			} else {
-				Logger.write(this, String.format("Can not set aggressor %s to field (%s)", aggressor.toString(), hitpoint.toString()));
-				return false;
-			}
-		} else {
-			Logger.write(this, String.format("Can not set %s to its home", victim.toString()));
-			return false;
-		}
+        if (victim.getColor() == aggressor.getColor()) {
+            /**
+             * The target is occupied of an different figure owned by the same
+             * player as the aggressor. It is just silly and not possible to
+             * attack your own figures.
+             * Tell it to the log and return a false to stop here.
+             */
+            Logger.write(
+                this,
+                String.format(
+                    "Figure %s can not attack figures of its own player!",
+                    aggressor.toString()
+                )
+            );
+            return false;
+        }
+        if (this.board.moveFigureAtHome(victim)) {
+            /**
+             * The victim was sent to its home. The next steps just can be made
+             * if the target is free which means that the victim was sent back.
+             * Then we can free the target to continue.
+             */
+            hitpoint.free();
+            if (hitpoint.occupie(aggressor)) {
+                /**
+                 * Here we can be sure that the victim is gone and we occupie
+                 * the target now.
+                 */
+                BoardElement aggressor_field = this.board.getFieldOfFigure(aggressor);
+                if (aggressor_field != null) {
+                    /* Just a sanity check */
+                    aggressor_field.free();
+                    Logger.write(
+                        this,
+                        String.format(
+                            "%s attacked %s",
+                            aggressor.toString(),
+                            victim.toString()
+                        )
+                    );
+                    return (!aggressor_field.isOccupied());
+                } else {
+                    /**
+                     * We end here if the aggressor should occupy the target,
+                     * but can't be found on the new field. We assume that an
+                     * error occured within the program logic which we can't
+                     * fix here. So we need to inform the user about it.
+                     * It is possible that the game is corrupt now.
+                     */
+                    Logger.write(
+                        this,
+                        String.format(
+                            "The new field of the aggressor (%s) can't be found!",
+                            aggressor.toString()
+                        )
+                    );
+                    return false;
+                }
+            } else {
+                /**
+                 * The target is free, but the aggressor can not occupy it. The
+                 * reason is not known and this should not happen, but we want
+                 * to be sure and catch every possible case.
+                 * The game is not fatal corrupted at this point.
+                 */
+                Logger.write(
+                    this,
+                    String.format(
+                        "Can not set aggressor %s to the new target field (%s)",
+                        aggressor.toString(),
+                        hitpoint.toString()
+                    )
+                );
+                return false;
+            }
+        } else {
+            /**
+             * The victim could not be moved to it's home and may still occupy
+             * the target field. We should not continue here and just leave the
+             * figure on this field. Even if the aggressor could be angry about
+             * this situation which should never happen.
+             */
+            Logger.write(
+                this,
+                String.format(
+                    "Can not set %s to it's home",
+                    victim.toString()
+                )
+            );
+            return false;
+        }
     }
 
     @Override
