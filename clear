@@ -9,4 +9,4 @@
 #
 ###
 
-rm $(find . -name "*.class") $(find . -name "*~")
+rm -f $(find . -name "*.class") $(find . -name "*~") MADN.jar

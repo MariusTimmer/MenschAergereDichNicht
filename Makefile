@@ -10,5 +10,5 @@
 MAINCLASS=de.lebk.madn.MenschAergereDichNicht
 MAINCLASSFILE=de/lebk/madn/MenschAergereDichNicht.java
 
-build: ${MAINCLASSFILE}
+build:	${MAINCLASSFILE}
 		javac ${MAINCLASSFILE}

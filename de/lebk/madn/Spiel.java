@@ -245,7 +245,7 @@ public class Spiel extends ActionManager implements MADNControlInterface {
                 this,
                 String.format(
                     "Figure %s can not attack figures of its own player!",
-                    aggressor.toString()
+                    aggressor
                 )
             );
             return false;
@@ -332,6 +332,16 @@ public class Spiel extends ActionManager implements MADNControlInterface {
         if (this.isWaitingForChooseFigure()) {
             Figur target = this.getFigur(figur, this.activePlayer);
             if (target != null) {
+                int original_step_position = figur.getPosition();
+                if (original_step_position == 0) {
+                    /**
+                     * The original relative position of the figure is zero, which
+                     * means that it came from home. In this case it is just allowed
+                     * to move one field / to the first field.
+                     * The easiest way to do that is to trim the steps to 1;
+                     */
+                    steps = 1;
+                }
                 BoardElement currentField, targetField;
                 currentField = this.board.getBoardElement(position);
                 targetField = this.calculateBoardElement(currentField, steps);
