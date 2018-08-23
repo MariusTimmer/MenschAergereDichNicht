@@ -1,9 +1,0 @@
-#!/usr/bin/sh
-
-###
-#
-# Make the javadoc
-#
-###
-
-javadoc $(find de/lebk/madn/ -name *.java)
